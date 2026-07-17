@@ -13,10 +13,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect admin & auth/scanner routes - must be staff or admin
-  if (path.startsWith('/admin') || path.startsWith('/authentication')) {
+  // Protect scanner check-in route - must be staff or admin
+  if (path.startsWith('/authentication')) {
     if (!user) {
-      return NextResponse.redirect(new URL('/register', request.url));
+      return NextResponse.redirect(new URL('/admin', request.url));
     }
 
     try {
@@ -44,12 +44,12 @@ export async function middleware(request: NextRequest) {
         .single();
 
       if (error || !profile || (profile.role !== 'staff' && profile.role !== 'admin')) {
-        // Not a staff or admin, redirect to homepage
-        return NextResponse.redirect(new URL('/', request.url));
+        // Not a staff or admin, redirect to admin login page
+        return NextResponse.redirect(new URL('/admin', request.url));
       }
     } catch (error) {
       console.error('Middleware check error:', error);
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/admin', request.url));
     }
   }
 

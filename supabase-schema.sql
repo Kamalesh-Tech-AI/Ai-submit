@@ -6,6 +6,18 @@
 -- Enable UUID extension if not already enabled
 create extension if not exists "uuid-ossp";
 
+-- Helper function to avoid infinite recursion on RLS Policies
+-- Marked as SECURITY DEFINER to bypass RLS inside the function context
+create or replace function public.is_staff()
+returns boolean as $$
+begin
+  return exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role in ('staff', 'admin')
+  );
+end;
+$$ language plpgsql security definer;
+
 -- 1. PROFILES
 create table if not exists public.profiles (
   id uuid primary key references auth.users on delete cascade,
@@ -36,12 +48,8 @@ create policy "Users can insert own profile"
   on public.profiles for insert with check (auth.uid() = id);
 
 create policy "Staff can read all profiles"
-  on public.profiles for select using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role in ('staff', 'admin')
-    )
-  );
+  on public.profiles for select using (public.is_staff());
+
 
 -- 2. REGISTRATIONS
 create table if not exists public.registrations (
@@ -67,20 +75,11 @@ create policy "Users can insert own registration"
   on public.registrations for insert with check (auth.uid() = user_id);
 
 create policy "Staff can read all registrations"
-  on public.registrations for select using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role in ('staff', 'admin')
-    )
-  );
+  on public.registrations for select using (public.is_staff());
 
 create policy "Staff can update registrations"
-  on public.registrations for update using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role in ('staff', 'admin')
-    )
-  );
+  on public.registrations for update using (public.is_staff());
+
 
 -- 3. BULK QR CODES
 create table if not exists public.bulk_qr_codes (
@@ -99,12 +98,8 @@ alter table public.bulk_qr_codes enable row level security;
 drop policy if exists "Staff can manage bulk QR codes" on public.bulk_qr_codes;
 
 create policy "Staff can manage bulk QR codes"
-  on public.bulk_qr_codes for all using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role in ('staff', 'admin')
-    )
-  );
+  on public.bulk_qr_codes for all using (public.is_staff());
+
 
 -- 4. SCAN LOGS
 create table if not exists public.scan_logs (
@@ -123,12 +118,8 @@ alter table public.scan_logs enable row level security;
 drop policy if exists "Staff can manage scan logs" on public.scan_logs;
 
 create policy "Staff can manage scan logs"
-  on public.scan_logs for all using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role in ('staff', 'admin')
-    )
-  );
+  on public.scan_logs for all using (public.is_staff());
+
 
 -- 5. CONTACT MESSAGES
 create table if not exists public.contact_messages (
@@ -148,12 +139,8 @@ create policy "Anyone can insert contact messages"
   on public.contact_messages for insert with check (true);
 
 create policy "Staff can read contact messages"
-  on public.contact_messages for select using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role in ('staff', 'admin')
-    )
-  );
+  on public.contact_messages for select using (public.is_staff());
+
 
 -- 6. FUNCTION: Auto-create profile on signup
 create or replace function public.handle_new_user()
