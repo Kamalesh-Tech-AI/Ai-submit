@@ -4,13 +4,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Users, CheckCircle, Ticket, Plus, Download,
-  Search, ShieldAlert, Cpu, Ban, QrCode
+  Search, ShieldAlert, Cpu, Ban, QrCode, Lock, Mail, Eye, EyeOff
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 import {
   getAdminStats, getRegistrations, getBulkQRCodes,
   createBulkQR, deactivateBulkQR, exportRegistrationsCSV
 } from '@/app/actions/admin';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { createClient } from '@/lib/supabase/client';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
@@ -18,6 +20,15 @@ import { Registration, BulkQRCode } from '@/lib/types';
 
 export default function AdminPage() {
   const router = useRouter();
+  const { user, profile, loading: authLoading, refreshProfile, signOut } = useAuth();
+  const supabase = createClient();
+
+  // Authentication states for Admin panel
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   // Data states
   const [stats, setStats] = useState({
@@ -70,12 +81,65 @@ export default function AdminPage() {
     }
   }, []);
 
+  // Trigger loading data only if user is authorized admin/staff
+  const isAdmin = profile?.role === 'admin' || profile?.role === 'staff';
+
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (isAdmin) {
       loadDashboardData();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [loadDashboardData]);
+    }
+  }, [isAdmin, loadDashboardData]);
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!adminEmail.trim() || !adminPassword.trim()) {
+      setLoginError('Please enter both email and password.');
+      return;
+    }
+
+    setLoginLoading(true);
+    setLoginError(null);
+
+    try {
+      // 1. Sign in with password
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: adminEmail,
+        password: adminPassword,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // 2. Fetch the newly logged-in profile
+      const { data: profileData, error: profileErr } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      if (profileErr || !profileData) {
+        throw new Error('Could not retrieve user role details.');
+      }
+
+      // 3. Verify user has staff/admin role
+      if (profileData.role !== 'admin' && profileData.role !== 'staff') {
+        // Log them out immediately so they do not remain in an unauthorized state
+        await supabase.auth.signOut();
+        throw new Error('Access Denied: This account does not have administrator permissions.');
+      }
+
+      // 4. Update the global AuthProvider context
+      await refreshProfile();
+      setAdminPassword('');
+      setAdminEmail('');
+    } catch (err: any) {
+      console.error('Admin Login failed:', err);
+      setLoginError(err.message || 'Incorrect email or password.');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
 
   const handleCreateBulkQR = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,9 +204,6 @@ export default function AdminPage() {
     canvas.height = 300;
     container.appendChild(canvas);
 
-    // Draw on canvas via standard qrcode.react drawing would require mounting it, 
-    // or we can just search for the SVG/canvas on the page.
-    // Instead of making a complex canvas draw, we can look up if we render a small preview canvas.
     const renderedCanvas = document.getElementById(`qr-canvas-${token}`) as HTMLCanvasElement;
     if (renderedCanvas) {
       const pngUrl = renderedCanvas.toDataURL('image/png');
@@ -176,32 +237,119 @@ export default function AdminPage() {
     return searchMatch && typeMatch && checkMatch;
   });
 
-  if (loading) {
+  const pageLoading = authLoading || (isAdmin && loading);
+
+  if (pageLoading) {
     return (
-      <div className="flex-grow flex items-center justify-center min-h-[50vh]">
+      <div className="flex-grow flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center space-y-4">
-          <Cpu className="w-10 h-10 text-[#002060] animate-spin" />
-          <p className="text-sm font-mono text-slate-600 font-semibold">Loading administrator dashboard...</p>
+          <Cpu className="w-10 h-10 text-[#2563EB] animate-spin" />
+          <p className="text-sm font-mono text-slate-600 font-semibold">Verifying credentials and loading dashboard...</p>
         </div>
       </div>
     );
   }
 
-  if (errorMsg) {
+  // Render Login Card if not admin
+  if (!isAdmin) {
     return (
-      <div className="flex-grow flex items-center justify-center px-4">
-        <Card hoverEffect={false} className="max-w-md p-6 text-center bg-white border-red-200">
-          <ShieldAlert className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="font-display font-bold text-lg text-red-600 mb-2">Access Denied</h3>
-          <p className="text-sm text-slate-600 font-medium mb-4">{errorMsg}</p>
-          <Button variant="secondary" onClick={() => router.push('/')} className="border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50">
-            Back to Home
-          </Button>
-        </Card>
+      <div className="flex-grow flex items-center justify-center px-4 py-16">
+        <div className="w-full max-w-md">
+          <Card hoverEffect={false} className="p-6 md:p-8 bg-white border-[#D2E0EE] shadow-lg text-left">
+            <div className="flex flex-col items-center text-center mb-8">
+              <div className="w-12 h-12 rounded-lg bg-[#0B3A82] flex items-center justify-center mb-4 shadow-md shadow-[#0B3A82]/15">
+                <Lock className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="font-display font-black text-xl md:text-2xl text-[#002060]">
+                ADMINISTRATOR PORTAL
+              </h2>
+              <p className="text-xs text-slate-500 mt-1.5 font-sans font-semibold">
+                Sign in with staff credentials to manage passes
+              </p>
+            </div>
+
+            {loginError && (
+              <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs md:text-sm flex items-start space-x-2 font-semibold">
+                <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
+                <span>{loginError}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleAdminLogin} className="space-y-4 font-sans">
+              <div>
+                <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <input
+                    type="email"
+                    id="email"
+                    required
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    placeholder="admin@unaitech.com"
+                    className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg pl-9 pr-4 py-2.5 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    required
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg pl-9 pr-10 py-2.5 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3.5 text-slate-400 hover:text-[#002060] focus:outline-none cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  fullWidth
+                  disabled={loginLoading || !adminEmail || !adminPassword}
+                  className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold h-11"
+                >
+                  {loginLoading ? 'Signing in...' : 'Sign In as Staff'}
+                </Button>
+              </div>
+
+              <div className="pt-2 text-center">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  fullWidth
+                  onClick={() => router.push('/')}
+                  className="border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50 font-semibold"
+                >
+                  Back to Home
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </div>
       </div>
     );
   }
 
+  // Otherwise render the full admin dashboard
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 text-left">
       {/* Page header */}
