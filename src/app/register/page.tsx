@@ -10,7 +10,7 @@ import Card from '@/components/ui/Card';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { user, profile, loading: authLoading, signInWithGoogle, refreshProfile } = useAuth();
+  const { user, profile, loading: authLoading, signInWithGoogle, signInAnonymously, refreshProfile } = useAuth();
 
   const [localLoading, setLocalLoading] = useState(false);
   const [needsProfile, setNeedsProfile] = useState(false);
@@ -58,6 +58,18 @@ export default function RegisterPage() {
     }
   };
 
+  const handleAnonymousSignIn = async () => {
+    setLocalLoading(true);
+    setErrorMsg(null);
+    try {
+      await signInAnonymously();
+    } catch (err: unknown) {
+      console.error('Anonymous Auth Error:', err);
+      setErrorMsg(err instanceof Error ? err.message : 'Failed to initialize anonymous session.');
+      setLocalLoading(false);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -95,8 +107,8 @@ export default function RegisterPage() {
     return (
       <div className="flex-grow flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center space-y-4">
-          <Cpu className="w-10 h-10 text-accent-signal animate-spin glow-signal" />
-          <p className="text-sm font-mono text-text-muted">Loading session...</p>
+          <Cpu className="w-10 h-10 text-[#2563EB] animate-spin" />
+          <p className="text-sm font-mono text-slate-600 font-semibold">Loading session...</p>
         </div>
       </div>
     );
@@ -105,23 +117,23 @@ export default function RegisterPage() {
   return (
     <div className="flex-grow flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        <Card hoverEffect={false} className="p-6 md:p-8">
+        <Card hoverEffect={false} className="p-6 md:p-8 bg-white border-[#D2E0EE] shadow-lg text-left">
           {/* Header branding */}
           <div className="flex flex-col items-center text-center mb-8">
-            <div className="w-12 h-12 rounded-lg bg-accent-signal flex items-center justify-center mb-4 shadow-md shadow-accent-signal/20">
+            <div className="w-12 h-12 rounded-lg bg-[#2563EB] flex items-center justify-center mb-4 shadow-md shadow-[#2563EB]/15">
               <Cpu className="w-6 h-6 text-white" />
             </div>
-            <h2 className="font-display font-bold text-xl md:text-2xl text-text-primary">
+            <h2 className="font-display font-black text-xl md:text-2xl text-[#002060]">
               AI SUBMIT 2026
             </h2>
-            <p className="text-xs text-text-muted mt-1.5 font-sans">
+            <p className="text-xs text-slate-500 mt-1.5 font-mono font-bold">
               IITM Research Park • Chennai, India
             </p>
           </div>
 
           {errorMsg && (
-            <div className="mb-6 p-4 rounded bg-red-500/5 border border-red-500/20 text-red-400 text-xs md:text-sm flex items-start space-x-2">
-              <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 rounded-xl bg-red-55 border border-red-200 text-red-800 text-xs md:text-sm flex items-start space-x-2 font-semibold">
+              <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5 text-red-600" />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -130,10 +142,10 @@ export default function RegisterPage() {
           {!user && (
             <div className="space-y-6">
               <div className="text-center">
-                <h3 className="font-display font-bold text-sm text-text-primary">
+                <h3 className="font-display font-bold text-sm text-[#002060] uppercase">
                   Conference Registration
                 </h3>
-                <p className="text-xs text-text-muted mt-1 font-sans">
+                <p className="text-xs text-slate-600 mt-1 font-sans font-medium">
                   Sign in with Google. Access is completely free for all verified participants.
                 </p>
               </div>
@@ -155,8 +167,33 @@ export default function RegisterPage() {
                 </Button>
               </div>
 
-              <div className="flex items-start gap-2.5 p-3.5 rounded bg-surface border border-border-card text-[11px] text-text-muted leading-relaxed font-sans mt-4">
-                <Info className="w-4 h-4 text-accent-signal shrink-0 mt-0.5" />
+              {/* Anonymous login bypass separator */}
+              <div className="relative my-6 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#D2E0EE]"></div>
+                </div>
+                <span className="relative bg-white px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Or Bypass Authentication (Test Mode)
+                </span>
+              </div>
+
+              {/* Anonymous login button */}
+              <div>
+                <Button
+                  onClick={handleAnonymousSignIn}
+                  variant="secondary"
+                  fullWidth
+                  className="gap-2 py-3 h-12 border-2 border-dashed border-[#2563EB]/40 text-[#2563EB] hover:bg-[#2563EB]/5 font-bold shadow-sm"
+                >
+                  Verify via Demo Account
+                </Button>
+                <p className="text-[10px] text-slate-500 mt-3 text-center leading-relaxed font-sans font-medium">
+                  Note: Google Sign-in requires credential configuration in your Supabase Auth dashboard. Use the demo option above to skip setup and immediately verify ticket and QR flow.
+                </p>
+              </div>
+
+              <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-slate-50 border border-[#D2E0EE] text-[11px] text-slate-600 leading-relaxed font-sans mt-4 font-semibold">
+                <Info className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
                 <span>By signing up, you will immediately receive an individual entrance pass with a secure QR code.</span>
               </div>
             </div>
@@ -166,21 +203,21 @@ export default function RegisterPage() {
           {user && needsProfile && (
             <div>
               <div className="text-center mb-6">
-                <div className="inline-flex items-center space-x-1.5 text-xs text-emerald-400 font-semibold mb-2">
-                  <CheckCircle className="w-4 h-4" />
-                  <span>Google Account Authenticated</span>
+                <div className="inline-flex items-center space-x-1.5 text-xs text-emerald-700 font-bold mb-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-600" />
+                  <span>Account Authenticated</span>
                 </div>
-                <h3 className="font-display font-bold text-sm text-text-primary">
+                <h3 className="font-display font-black text-sm text-[#002060] uppercase">
                   Complete Profile
                 </h3>
-                <p className="text-xs text-text-muted mt-0.5">
+                <p className="text-xs text-slate-600 mt-0.5 font-medium">
                   Provide your academic/professional details to issue your QR pass.
                 </p>
               </div>
 
               <form onSubmit={handleFormSubmit} className="space-y-4 font-sans text-left">
                 <div>
-                  <label htmlFor="fullName" className="block text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+                  <label htmlFor="fullName" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                     Full Name
                   </label>
                   <input
@@ -191,12 +228,12 @@ export default function RegisterPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your full name"
-                    className="w-full bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-sm focus:outline-none focus:border-accent-signal"
+                    className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+                  <label htmlFor="phone" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                     Mobile Number
                   </label>
                   <input
@@ -207,12 +244,12 @@ export default function RegisterPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="10-digit mobile number"
-                    className="w-full bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-sm focus:outline-none focus:border-accent-signal"
+                    className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="university" className="block text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+                  <label htmlFor="university" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                     College / Organisation
                   </label>
                   <input
@@ -223,12 +260,12 @@ export default function RegisterPage() {
                     onChange={handleInputChange}
                     required
                     placeholder="e.g. Anna University"
-                    className="w-full bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-sm focus:outline-none focus:border-accent-signal"
+                    className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="attendeeType" className="block text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+                  <label htmlFor="attendeeType" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                     Attendee Type
                   </label>
                   <select
@@ -236,7 +273,7 @@ export default function RegisterPage() {
                     name="attendeeType"
                     value={formData.attendeeType}
                     onChange={handleInputChange}
-                    className="w-full bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-sm focus:outline-none focus:border-accent-signal"
+                    className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
                   >
                     <option value="student">Student / Research Scholar</option>
                     <option value="professional">Working Professional</option>
@@ -249,7 +286,7 @@ export default function RegisterPage() {
                     variant="primary"
                     fullWidth
                     disabled={submitting || !formData.fullName || !formData.phone || !formData.university}
-                    className="h-11 py-2.5 font-semibold"
+                    className="h-11 py-2.5 font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white"
                   >
                     {submitting ? 'Registering...' : 'Generate Entry Pass'}
                   </Button>

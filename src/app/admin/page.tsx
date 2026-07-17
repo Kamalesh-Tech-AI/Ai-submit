@@ -180,8 +180,8 @@ export default function AdminPage() {
     return (
       <div className="flex-grow flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center space-y-4">
-          <Cpu className="w-10 h-10 text-accent-ember animate-spin glow-ember" />
-          <p className="text-sm font-mono text-text-muted">Loading administrator dashboard...</p>
+          <Cpu className="w-10 h-10 text-[#002060] animate-spin" />
+          <p className="text-sm font-mono text-slate-600 font-semibold">Loading administrator dashboard...</p>
         </div>
       </div>
     );
@@ -190,11 +190,11 @@ export default function AdminPage() {
   if (errorMsg) {
     return (
       <div className="flex-grow flex items-center justify-center px-4">
-        <Card hoverEffect={false} className="max-w-md p-6 text-center border-red-500/30">
+        <Card hoverEffect={false} className="max-w-md p-6 text-center bg-white border-red-200">
           <ShieldAlert className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="font-display font-bold text-lg text-red-400 mb-2">Access Denied</h3>
-          <p className="text-sm text-text-muted mb-4">{errorMsg}</p>
-          <Button variant="secondary" onClick={() => router.push('/')}>
+          <h3 className="font-display font-bold text-lg text-red-600 mb-2">Access Denied</h3>
+          <p className="text-sm text-slate-600 font-medium mb-4">{errorMsg}</p>
+          <Button variant="secondary" onClick={() => router.push('/')} className="border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50">
             Back to Home
           </Button>
         </Card>
@@ -203,22 +203,22 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 text-left">
       {/* Page header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-border-card pb-6 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-[#D2E0EE] pb-6 gap-4">
         <div>
-          <span className="font-mono text-xs uppercase tracking-wider text-accent-ember font-semibold bg-accent-ember/10 px-2 py-0.5 border border-accent-ember/20 rounded">
+          <span className="font-mono text-xs uppercase tracking-wider text-[#0B3A82] font-bold bg-[#0B3A82]/10 px-2 py-0.5 border border-[#0B3A82]/20 rounded">
             ADMIN STAFF PORTAL
           </span>
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-text-primary mt-2">
+          <h1 className="font-display text-2xl md:text-3xl font-black text-[#002060] mt-2 uppercase">
             Event Registration & Passes Dashboard
           </h1>
         </div>
         <div className="flex items-center space-x-3">
-          <Button variant="secondary" size="sm" onClick={loadDashboardData}>
+          <Button variant="secondary" size="sm" onClick={loadDashboardData} className="border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50 font-bold">
             Refresh Data
           </Button>
-          <Button variant="ember" size="sm" className="gap-1.5" onClick={handleExportCSV}>
+          <Button variant="primary" size="sm" className="gap-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold" onClick={handleExportCSV}>
             <Download className="w-4 h-4" />
             Export CSV
           </Button>
@@ -228,17 +228,17 @@ export default function AdminPage() {
       {/* Metrics Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {[
-          { label: 'Total Registered', val: stats.totalRegistrations, icon: <Users className="w-5 h-5 text-accent-signal" /> },
-          { label: 'Checked In (Indiv)', val: stats.checkedInIndividuals, icon: <CheckCircle className="w-5 h-5 text-emerald-400" /> },
-          { label: 'Bulk QR Codes Issued', val: stats.totalBulkIssued, icon: <Ticket className="w-5 h-5 text-accent-ember" /> },
-          { label: 'Bulk Check-ins Used', val: stats.checkedInBulk, icon: <QrCode className="w-5 h-5 text-accent-ember" /> },
+          { label: 'Total Registered', val: stats.totalRegistrations, icon: <Users className="w-5 h-5 text-[#2563EB]" /> },
+          { label: 'Checked In (Indiv)', val: stats.checkedInIndividuals, icon: <CheckCircle className="w-5 h-5 text-emerald-600" /> },
+          { label: 'Bulk QR Codes Issued', val: stats.totalBulkIssued, icon: <Ticket className="w-5 h-5 text-[#0B3A82]" /> },
+          { label: 'Bulk Check-ins Used', val: stats.checkedInBulk, icon: <QrCode className="w-5 h-5 text-[#0B3A82]" /> },
         ].map((m, idx) => (
-          <div key={idx} className="bg-surface border border-border-card rounded-lg p-5 flex items-center justify-between">
+          <div key={idx} className="bg-white border border-[#D2E0EE] rounded-xl p-5 flex items-center justify-between shadow-sm">
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted">{m.label}</span>
-              <p className="font-mono text-2xl md:text-3xl font-bold text-text-primary mt-1">{m.val}</p>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">{m.label}</span>
+              <p className="font-mono text-2xl md:text-3xl font-black text-[#002060] mt-1">{m.val}</p>
             </div>
-            <div className="bg-ink p-3 rounded-md border border-border-card">{m.icon}</div>
+            <div className="bg-slate-50 p-3 rounded-lg border border-[#D2E0EE]">{m.icon}</div>
           </div>
         ))}
       </div>
@@ -246,14 +246,14 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Bulk QR Manager Column */}
         <div className="lg:col-span-1 space-y-6">
-          <Card hoverEffect={false} className="p-6 space-y-5">
-            <h3 className="font-display font-bold text-base md:text-lg text-text-primary border-b border-border-card pb-2">
+          <Card hoverEffect={false} className="p-6 space-y-5 bg-white border-[#D2E0EE] shadow-sm">
+            <h3 className="font-display font-bold text-base md:text-lg text-[#002060] border-b border-slate-100 pb-2">
               Generate University Group QR
             </h3>
 
             <form onSubmit={handleCreateBulkQR} className="space-y-4 font-sans text-left">
               <div>
-                <label htmlFor="univName" className="block text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+                <label htmlFor="univName" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                   University Name
                 </label>
                 <input
@@ -263,12 +263,12 @@ export default function AdminPage() {
                   onChange={(e) => setUnivName(e.target.value)}
                   required
                   placeholder="e.g. SRM University"
-                  className="w-full bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-sm focus:outline-none focus:border-accent-signal"
+                  className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
                 />
               </div>
 
               <div>
-                <label htmlFor="maxLimit" className="block text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
+                <label htmlFor="maxLimit" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                   Max Scan Limit (Capped Uses)
                 </label>
                 <input
@@ -279,7 +279,7 @@ export default function AdminPage() {
                   required
                   min={1}
                   placeholder="e.g. 50"
-                  className="w-full bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-sm focus:outline-none focus:border-accent-signal"
+                  className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-sm focus:outline-none focus:border-[#2563EB] font-semibold"
                 />
               </div>
 
@@ -288,7 +288,7 @@ export default function AdminPage() {
                 variant="primary"
                 fullWidth
                 disabled={creatingBulk || !univName || maxLimit <= 0}
-                className="gap-2 font-semibold"
+                className="gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold h-11"
               >
                 <Plus className="w-4.5 h-4.5" />
                 {creatingBulk ? 'Generating...' : 'Create Group Pass'}
@@ -299,30 +299,30 @@ export default function AdminPage() {
 
         {/* Existing Group Pass List */}
         <div className="lg:col-span-2">
-          <Card hoverEffect={false} className="p-6 h-full flex flex-col justify-between">
+          <Card hoverEffect={false} className="p-6 h-full flex flex-col justify-between bg-white border-[#D2E0EE] shadow-sm">
             <div>
-              <h3 className="font-display font-bold text-base md:text-lg text-text-primary border-b border-border-card pb-2 mb-4">
+              <h3 className="font-display font-bold text-base md:text-lg text-[#002060] border-b border-slate-100 pb-2 mb-4">
                 Active University Group Passes
               </h3>
 
               {bulkCodes.length === 0 ? (
-                <p className="text-xs text-text-muted font-mono py-6 text-center">No group passes issued yet.</p>
+                <p className="text-xs text-slate-500 font-mono py-6 text-center font-semibold">No group passes issued yet.</p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-sans">
                     <thead>
-                      <tr className="border-b border-border-card text-text-muted font-mono uppercase tracking-wider">
+                      <tr className="border-b border-slate-100 text-slate-500 font-mono uppercase tracking-wider">
                         <th className="py-2.5">University</th>
                         <th className="py-2.5 text-center">Scans Used</th>
                         <th className="py-2.5 text-center">Status</th>
                         <th className="py-2.5 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border-card/30">
+                    <tbody className="divide-y divide-slate-100">
                       {bulkCodes.map((code) => (
-                        <tr key={code.id} className="hover:bg-surface/50">
-                          <td className="py-3 font-semibold text-text-primary">{code.university_name}</td>
-                          <td className="py-3 text-center font-mono font-medium">
+                        <tr key={code.id} className="hover:bg-slate-50">
+                          <td className="py-3 font-bold text-[#002060]">{code.university_name}</td>
+                          <td className="py-3 text-center font-mono font-bold text-[#476282]">
                             {code.current_count} / {code.max_limit}
                           </td>
                           <td className="py-3 text-center">
@@ -343,7 +343,7 @@ export default function AdminPage() {
                               <button
                                 onClick={() => downloadBulkQR(code.university_name, code.qr_token)}
                                 title="Download QR Pass"
-                                className="p-1 rounded hover:bg-ink text-text-muted hover:text-accent-signal transition-colors cursor-pointer"
+                                className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-[#2563EB] transition-colors cursor-pointer"
                               >
                                 <Download className="w-4 h-4" />
                               </button>
@@ -351,7 +351,7 @@ export default function AdminPage() {
                                 <button
                                   onClick={() => handleDeactivateBulk(code.id)}
                                   title="Deactivate Code"
-                                  className="p-1 rounded hover:bg-ink text-text-muted hover:text-red-400 transition-colors cursor-pointer"
+                                  className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
                                 >
                                   <Ban className="w-4 h-4" />
                                 </button>
@@ -370,9 +370,9 @@ export default function AdminPage() {
       </div>
 
       {/* Registrations List Table */}
-      <Card hoverEffect={false} className="p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-border-card pb-4 mb-6 gap-4">
-          <h3 className="font-display font-bold text-base md:text-lg text-text-primary">
+      <Card hoverEffect={false} className="p-6 bg-white border-[#D2E0EE] shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-100 pb-4 mb-6 gap-4">
+          <h3 className="font-display font-black text-base md:text-lg text-[#002060] uppercase">
             Individual Attendees Registry ({filteredRegs.length})
           </h3>
 
@@ -380,13 +380,13 @@ export default function AdminPage() {
           <div className="flex flex-wrap items-center gap-3">
             {/* Search Input */}
             <div className="relative font-sans text-xs">
-              <Search className="w-4 h-4 text-text-muted absolute left-3 top-2.5" />
+              <Search className="w-4 h-4 text-[#476282] absolute left-3 top-2.5" />
               <input
                 type="text"
                 placeholder="Search name, university..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-ink border border-border-card rounded-md pl-9 pr-4 py-2.5 text-text-primary w-48 md:w-56 focus:outline-none focus:border-accent-signal transition-all"
+                className="bg-slate-50 border border-[#D2E0EE] rounded-lg pl-9 pr-4 py-2.5 text-[#002060] w-48 md:w-56 focus:outline-none focus:border-[#2563EB] transition-all font-semibold"
               />
             </div>
 
@@ -394,7 +394,7 @@ export default function AdminPage() {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="bg-ink border border-border-card rounded-md px-3 py-2.5 text-xs text-text-primary font-sans focus:outline-none focus:border-accent-signal"
+              className="bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2.5 text-xs text-[#002060] font-sans focus:outline-none focus:border-[#2563EB] font-semibold"
             >
               <option value="all">All Types</option>
               <option value="student">Students</option>
@@ -405,7 +405,7 @@ export default function AdminPage() {
             <select
               value={filterCheckIn}
               onChange={(e) => setFilterCheckIn(e.target.value)}
-              className="bg-ink border border-border-card rounded-md px-3 py-2.5 text-xs text-text-primary font-sans focus:outline-none focus:border-accent-signal"
+              className="bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2.5 text-xs text-[#002060] font-sans focus:outline-none focus:border-[#2563EB] font-semibold"
             >
               <option value="all">All Status</option>
               <option value="yes">Checked In</option>
@@ -415,12 +415,12 @@ export default function AdminPage() {
         </div>
 
         {filteredRegs.length === 0 ? (
-          <p className="text-xs text-text-muted font-mono py-10 text-center">No matching registrations found.</p>
+          <p className="text-xs text-slate-500 font-mono py-10 text-center font-semibold">No matching registrations found.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto font-semibold">
             <table className="w-full text-left text-xs font-sans">
               <thead>
-                <tr className="border-b border-border-card text-text-muted font-mono uppercase tracking-wider">
+                <tr className="border-b border-slate-100 text-slate-500 font-mono uppercase tracking-wider">
                   <th className="py-3">Name</th>
                   <th className="py-3">Contact</th>
                   <th className="py-3">College / Organisation</th>
@@ -429,23 +429,23 @@ export default function AdminPage() {
                   <th className="py-3 text-right">Registration Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border-card/30">
+              <tbody className="divide-y divide-slate-100">
                  {filteredRegs.map((reg) => {
                   const p = reg.profiles;
                   return (
-                    <tr key={reg.id} className="hover:bg-surface/50">
-                      <td className="py-3.5 font-semibold text-text-primary">{p?.full_name || 'Anonymous'}</td>
-                      <td className="py-3.5 text-text-muted">
+                    <tr key={reg.id} className="hover:bg-slate-50">
+                      <td className="py-3.5 font-bold text-[#002060]">{p?.full_name || 'Anonymous'}</td>
+                      <td className="py-3.5 text-slate-600 font-semibold">
                         <div>{p?.email}</div>
-                        <div className="font-mono text-[10px] mt-0.5">{p?.phone || '-'}</div>
+                        <div className="font-mono text-[10px] mt-0.5 text-slate-500">{p?.phone || '-'}</div>
                       </td>
-                      <td className="py-3.5 text-accent-ember font-medium">{p?.university || '-'}</td>
-                      <td className="py-3.5 capitalize font-mono text-[11px]">{p?.attendee_type || '-'}</td>
+                      <td className="py-3.5 text-[#0B3A82] font-bold">{p?.university || '-'}</td>
+                      <td className="py-3.5 capitalize font-mono text-[11px] text-[#476282]">{p?.attendee_type || '-'}</td>
                       <td className="py-3.5 text-center">
                         {reg.checked_in ? (
                           <div className="flex flex-col items-center">
                             <Badge variant="success">YES</Badge>
-                            <span className="text-[9px] font-mono text-text-muted mt-1">
+                            <span className="text-[9px] font-mono text-slate-500 mt-1">
                               {reg.checked_in_at ? new Date(reg.checked_in_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-'}
                             </span>
                           </div>
@@ -453,7 +453,7 @@ export default function AdminPage() {
                           <Badge variant="danger">NO</Badge>
                         )}
                       </td>
-                      <td className="py-3.5 text-right font-mono text-text-muted">
+                      <td className="py-3.5 text-right font-mono text-slate-500">
                         {new Date(reg.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}
                       </td>
                     </tr>

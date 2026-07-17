@@ -34,17 +34,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 glass-panel border-b border-border-card bg-ink/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 bg-white/95 border-b border-[#D2E0EE] shadow-sm backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo / Title */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2.5 focus:outline-none">
-              <div className="w-9 h-9 rounded-md bg-accent-signal flex items-center justify-center glow-signal">
+              <div className="w-9 h-9 rounded-md bg-[#2563EB] flex items-center justify-center shadow-sm shadow-[#2563EB]/25">
                 <Cpu className="w-5 h-5 text-white animate-pulse" />
               </div>
-              <span className="font-display font-bold text-lg md:text-xl tracking-wider text-text-primary">
-                AI SUBMIT <span className="text-accent-signal">2026</span>
+              <span className="font-display font-black text-lg md:text-xl tracking-wider text-[#002060]">
+                AI SUBMIT <span className="text-[#2563EB]">2026</span>
               </span>
             </Link>
           </div>
@@ -55,8 +55,8 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium tracking-wide transition-colors duration-200 focus:outline-none hover:text-accent-signal ${
-                  isActive(link.href) ? 'text-accent-signal' : 'text-text-muted'
+                className={`text-sm font-semibold tracking-wide transition-colors duration-200 focus:outline-none ${
+                  isActive(link.href) ? 'text-[#2563EB]' : 'text-[#476282] hover:text-[#2563EB]'
                 }`}
               >
                 {link.label}
@@ -65,12 +65,12 @@ export default function Navbar() {
 
             {/* Staff / Admin Links */}
             {(role === 'staff' || role === 'admin') && (
-              <div className="flex items-center space-x-4 border-l border-border-card pl-4">
+              <div className="flex items-center space-x-4 border-l border-[#D2E0EE] pl-4">
                 <Link
                   href="/admin"
                   title="Admin Dashboard"
-                  className={`flex items-center space-x-1 text-sm font-medium transition-colors hover:text-accent-ember ${
-                    isActive('/admin') ? 'text-accent-ember' : 'text-text-muted'
+                  className={`flex items-center space-x-1 text-sm font-semibold transition-colors ${
+                    isActive('/admin') ? 'text-[#0B3A82]' : 'text-[#476282] hover:text-[#0B3A82]'
                   }`}
                 >
                   <Settings className="w-4 h-4" />
@@ -79,8 +79,8 @@ export default function Navbar() {
                 <Link
                   href="/authentication"
                   title="Scan Check-in"
-                  className={`flex items-center space-x-1 text-sm font-medium transition-colors hover:text-accent-ember ${
-                    isActive('/authentication') ? 'text-accent-ember' : 'text-text-muted'
+                  className={`flex items-center space-x-1 text-sm font-semibold transition-colors ${
+                    isActive('/authentication') ? 'text-[#0B3A82]' : 'text-[#476282] hover:text-[#0B3A82]'
                   }`}
                 >
                   <Scan className="w-4 h-4" />
@@ -94,7 +94,7 @@ export default function Navbar() {
               {user ? (
                 <>
                   <Link href="/ticket">
-                    <Button variant="primary" size="sm" className="gap-2">
+                    <Button variant="primary" size="sm" className="gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white">
                       <Ticket className="w-4 h-4" />
                       My Ticket
                     </Button>
@@ -102,7 +102,7 @@ export default function Navbar() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="gap-2"
+                    className="gap-2 border-[#D2E0EE] text-[#002060] bg-slate-50 hover:bg-slate-100"
                     onClick={handleLogout}
                     title="Log Out"
                   >
@@ -111,7 +111,7 @@ export default function Navbar() {
                 </>
               ) : (
                 <Link href="/register">
-                  <Button variant="primary" size="sm">
+                  <Button variant="primary" size="sm" className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white">
                     Register — Free
                   </Button>
                 </Link>
@@ -123,7 +123,7 @@ export default function Navbar() {
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-text-muted hover:text-text-primary hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent-signal"
+              className="inline-flex items-center justify-center p-2 rounded-md text-[#476282] hover:text-[#002060] hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               aria-expanded={isOpen}
             >
               <span className="sr-only">Open main menu</span>
@@ -135,17 +135,17 @@ export default function Navbar() {
 
       {/* Mobile Menu Panel */}
       {isOpen && (
-        <div className="lg:hidden bg-surface border-b border-border-card">
+        <div className="lg:hidden bg-white border-b border-[#D2E0EE]">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                className={`block px-3 py-2 rounded-md text-base font-semibold transition-colors ${
                   isActive(link.href)
-                    ? 'text-accent-signal bg-accent-signal/5 font-semibold'
-                    : 'text-text-muted hover:text-text-primary hover:bg-ink'
+                    ? 'text-[#2563EB] bg-[#2563EB]/5'
+                    : 'text-[#476282] hover:text-[#002060] hover:bg-slate-50'
                 }`}
               >
                 {link.label}
@@ -153,12 +153,12 @@ export default function Navbar() {
             ))}
 
             {(role === 'staff' || role === 'admin') && (
-              <div className="border-t border-border-card mt-2 pt-2 space-y-1">
+              <div className="border-t border-[#D2E0EE] mt-2 pt-2 space-y-1">
                 <Link
                   href="/admin"
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isActive('/admin') ? 'text-accent-ember bg-accent-ember/5' : 'text-text-muted hover:text-text-primary'
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-semibold transition-colors ${
+                    isActive('/admin') ? 'text-[#0B3A82] bg-[#0B3A82]/5' : 'text-[#476282] hover:text-[#002060]'
                   }`}
                 >
                   <Settings className="w-4.5 h-4.5" />
@@ -167,8 +167,8 @@ export default function Navbar() {
                 <Link
                   href="/authentication"
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isActive('/authentication') ? 'text-accent-ember bg-accent-ember/5' : 'text-text-muted hover:text-text-primary'
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-semibold transition-colors ${
+                    isActive('/authentication') ? 'text-[#0B3A82] bg-[#0B3A82]/5' : 'text-[#476282] hover:text-[#002060]'
                   }`}
                 >
                   <Scan className="w-4.5 h-4.5" />
@@ -178,26 +178,26 @@ export default function Navbar() {
             )}
 
             {/* Auth Actions in Mobile Menu */}
-            <div className="border-t border-border-card pt-4 pb-2 px-3">
+            <div className="border-t border-[#D2E0EE] pt-4 pb-2 px-3">
               {user ? (
                 <div className="flex flex-col space-y-2">
-                  <div className="text-xs text-text-muted px-1 truncate">
-                    Signed in as <span className="font-semibold text-text-primary">{user.email}</span>
+                  <div className="text-xs text-[#476282] px-1 truncate">
+                    Signed in as <span className="font-bold text-[#002060]">{user.email}</span>
                   </div>
                   <Link href="/ticket" onClick={() => setIsOpen(false)} className="w-full">
-                    <Button variant="primary" fullWidth className="gap-2">
+                    <Button variant="primary" fullWidth className="gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white">
                       <Ticket className="w-4.5 h-4.5" />
                       My Ticket
                     </Button>
                   </Link>
-                  <Button variant="secondary" fullWidth className="gap-2" onClick={handleLogout}>
+                  <Button variant="secondary" fullWidth className="gap-2 border-[#D2E0EE] text-[#002060] bg-slate-50 hover:bg-slate-100" onClick={handleLogout}>
                     <LogOut className="w-4.5 h-4.5" />
                     Log Out
                   </Button>
                 </div>
               ) : (
                 <Link href="/register" onClick={() => setIsOpen(false)} className="w-full block">
-                  <Button variant="primary" fullWidth>
+                  <Button variant="primary" fullWidth className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white">
                     Register — Free
                   </Button>
                 </Link>

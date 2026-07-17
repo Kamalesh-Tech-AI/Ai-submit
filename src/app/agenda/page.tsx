@@ -60,23 +60,23 @@ export default function AgendaPage() {
       </div>
 
       {/* Timeline Section */}
-      <div className="relative border-l border-border-card ml-4 md:ml-32 space-y-6">
+      <div className="relative border-l border-[#D2E0EE] ml-4 md:ml-32 space-y-6">
         {filteredAgenda.map((session) => (
-          <div key={session.id} className="relative pl-6 md:pl-10 group">
+          <div key={session.id} className="relative pl-6 md:pl-10 group text-left">
             {/* Timeline bullet */}
-            <div className="absolute left-[-5px] top-7 w-2.5 h-2.5 bg-accent-signal rounded-full border border-ink group-hover:scale-125 transition-transform" />
+            <div className="absolute left-[-5px] top-7 w-2.5 h-2.5 bg-[#2563EB] rounded-full border border-white group-hover:scale-125 transition-transform" />
 
             {/* Time label for larger viewports */}
-            <div className="hidden md:block absolute left-[-140px] top-4 w-28 text-right font-mono text-xs font-semibold text-text-primary tracking-wider">
+            <div className="hidden md:block absolute left-[-140px] top-4 w-28 text-right font-mono text-xs font-bold text-[#002060] tracking-wider">
               {session.time}
             </div>
 
             {/* Session Card */}
-            <Card hoverEffect={true} className="p-5">
+            <Card hoverEffect={true} className="p-5 bg-white border-[#D2E0EE] shadow-sm">
               <div className="flex flex-col space-y-2">
                 {/* Mobile-only time label */}
-                <div className="flex md:hidden items-center text-xs font-mono text-text-muted space-x-1.5 mb-1">
-                  <Clock className="w-3.5 h-3.5 text-accent-signal" />
+                <div className="flex md:hidden items-center text-xs font-mono text-slate-500 space-x-1.5 mb-1">
+                  <Clock className="w-3.5 h-3.5 text-[#2563EB]" />
                   <span>{session.time}</span>
                 </div>
 
@@ -88,14 +88,14 @@ export default function AgendaPage() {
                 </div>
 
                 {/* Session Title */}
-                <h4 className="font-display font-bold text-base md:text-lg text-text-primary pt-1">
+                <h4 className="font-display font-extrabold text-base md:text-lg text-[#002060] pt-1">
                   {session.title}
                 </h4>
 
                 {/* Speaker info */}
                 {session.speaker && (
-                  <div className="flex items-center space-x-2 text-xs md:text-sm text-text-muted pt-1">
-                    <User className="w-4 h-4 text-accent-signal shrink-0" />
+                  <div className="flex items-center space-x-2 text-xs md:text-sm text-slate-600 font-semibold pt-1">
+                    <User className="w-4 h-4 text-[#2563EB] shrink-0" />
                     <span>{session.speaker}</span>
                   </div>
                 )}

@@ -55,14 +55,14 @@ export default function CountdownTimer() {
     <div className="flex justify-center space-x-3 md:space-x-5">
       {items.map((item, idx) => (
         <div key={idx} className="flex flex-col items-center">
-          <div className="bg-surface border border-border-card rounded-lg w-16 h-16 md:w-20 md:h-20 flex items-center justify-center shadow-lg relative overflow-hidden">
+          <div className="bg-[#002060] border-2 border-[#2563EB]/30 rounded-xl w-16 h-16 md:w-20 md:h-20 flex items-center justify-center shadow-md relative overflow-hidden">
             {/* Subtle glow background */}
-            <div className="absolute inset-0 bg-radial-gradient from-accent-signal/5 to-transparent pointer-events-none" />
-            <span className="font-mono text-xl md:text-3xl font-bold text-text-primary tracking-tight">
+            <div className="absolute inset-0 bg-radial-gradient from-white/10 to-transparent pointer-events-none" />
+            <span className="font-mono text-xl md:text-3xl font-extrabold text-white tracking-tight">
               {formatNumber(item.value)}
             </span>
           </div>
-          <span className="text-[10px] md:text-xs font-mono tracking-widest text-text-muted mt-2">
+          <span className="text-[10px] md:text-xs font-mono font-bold tracking-widest text-[#002060] mt-2">
             {item.label}
           </span>
         </div>

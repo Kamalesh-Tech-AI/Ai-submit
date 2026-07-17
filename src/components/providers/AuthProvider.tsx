@@ -19,6 +19,7 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInAnonymously: () => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -103,6 +104,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signInAnonymously = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+    } catch (err) {
+      console.error('Sign in anonymously failed:', err);
+      setLoading(false);
+      throw err;
+    }
+  };
+
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -120,6 +133,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         profile,
         loading,
         signInWithGoogle,
+        signInAnonymously,
         signOut,
         refreshProfile,
       }}

@@ -41,26 +41,26 @@ export default function ChiefGuestsPage() {
             </div>
 
             {/* Speaker Information */}
-            <div className="flex-grow flex flex-col justify-between">
+            <div className="flex-grow flex flex-col justify-between text-left">
               <div>
-                <h3 className="font-display font-bold text-lg md:text-xl text-text-primary">
+                <h3 className="font-display font-black text-lg md:text-xl text-[#002060]">
                   {guest.name}
                 </h3>
-                <p className="text-xs text-accent-ember font-mono uppercase tracking-wider mt-1">
+                <p className="text-xs text-[#2563EB] font-mono font-bold uppercase tracking-wider mt-1.5 bg-[#2563EB]/5 inline-block px-2 py-0.5 rounded">
                   {guest.designation}
                 </p>
-                <p className="text-xs text-text-primary font-semibold mt-0.5">
+                <p className="text-xs text-[#0B3A82] font-extrabold mt-2">
                   {guest.organization}
                 </p>
                 
-                <p className="text-xs md:text-sm text-text-muted mt-4 leading-relaxed font-sans">
+                <p className="text-xs md:text-sm text-slate-600 mt-4 leading-relaxed font-sans font-medium">
                   {guest.bio}
                 </p>
               </div>
 
               {/* Decorative signature hairline */}
-              <div className="border-t border-border-card/50 mt-5 pt-3 flex justify-between items-center text-[10px] font-mono text-text-muted">
-                <span>AI SUBMIT SPEAKER</span>
+              <div className="border-t border-[#D2E0EE] mt-5 pt-3 flex justify-between items-center text-[10px] font-mono text-[#476282] font-bold">
+                <span>AI SUMMIT SPEAKER</span>
                 <span>ID: {guest.id.toUpperCase()}</span>
               </div>
             </div>

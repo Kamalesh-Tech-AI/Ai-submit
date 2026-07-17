@@ -41,8 +41,8 @@
 }
 
 body {
-  background-color: var(--color-ink);
-  color: var(--color-text-primary);
+  background-color: #F4F6F9;
+  color: #002060;
   font-family: var(--font-ibm-plex-sans);
   overflow-x: hidden;
 }

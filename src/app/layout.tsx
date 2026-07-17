@@ -58,10 +58,10 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} ${jetbrainsMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="bg-ink text-text-primary min-h-full flex flex-col font-sans selection:bg-accent-signal selection:text-white">
+      <body className="bg-[#F4F6F9] text-[#002060] min-h-full flex flex-col font-sans selection:bg-[#2563EB] selection:text-white">
         <AuthProvider>
           <Navbar />
-          <main className="flex-grow flex flex-col">
+          <main className="flex-grow flex flex-col bg-[#F4F6F9]">
             {children}
           </main>
           <Footer />

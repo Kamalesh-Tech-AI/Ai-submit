@@ -42,26 +42,26 @@ export default function ContactPage() {
         subtitle="Have questions about registrations, group bookings, or exhibiting student projects? Drop us a line."
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 text-left">
         {/* Contact Form */}
         <div className="lg:col-span-2">
-          <Card hoverEffect={false} className="p-6 md:p-8">
-            <h3 className="font-display font-bold text-base md:text-lg text-text-primary mb-6">
+          <Card hoverEffect={false} className="p-6 md:p-8 bg-white border-[#D2E0EE] shadow-sm">
+            <h3 className="font-display font-black text-base md:text-lg text-[#002060] mb-6">
               Send a Message
             </h3>
 
             {status && (
               <div
-                className={`mb-6 p-4 rounded-md border flex items-start space-x-3 text-xs md:text-sm ${
+                className={`mb-6 p-4 rounded-xl border flex items-start space-x-3 text-xs md:text-sm font-semibold ${
                   status.type === 'success'
-                    ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400'
-                    : 'bg-red-500/5 border-red-500/20 text-red-400'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    : 'bg-red-50 border-red-200 text-red-800'
                 }`}
               >
                 {status.type === 'success' ? (
-                  <CheckCircle className="w-5 h-5 shrink-0" />
+                  <CheckCircle className="w-5 h-5 shrink-0 text-emerald-600" />
                 ) : (
-                  <AlertCircle className="w-5 h-5 shrink-0" />
+                  <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
                 )}
                 <span>{status.msg}</span>
               </div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5 font-sans">
               <div>
-                <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
+                <label htmlFor="name" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                   Full Name
                 </label>
                 <input
@@ -79,13 +79,13 @@ export default function ContactPage() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  placeholder="Enter your full name"
-                  className="w-full bg-ink border border-border-card rounded-md px-4 py-2.5 text-text-primary text-sm focus:outline-none focus:border-accent-signal transition-all"
+                  placeholder="Enter your name"
+                  className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-4 py-2.5 text-[#002060] placeholder-[#476282]/50 text-sm focus:outline-none focus:border-[#2563EB] transition-all font-semibold"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
+                <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
                   Email Address
                 </label>
                 <input
@@ -96,23 +96,23 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   placeholder="name@university.edu"
-                  className="w-full bg-ink border border-border-card rounded-md px-4 py-2.5 text-text-primary text-sm focus:outline-none focus:border-accent-signal transition-all"
+                  className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-4 py-2.5 text-[#002060] placeholder-[#476282]/50 text-sm focus:outline-none focus:border-[#2563EB] transition-all font-semibold"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
-                  Message
+                <label htmlFor="message" className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                  Message Details
                 </label>
                 <textarea
                   id="message"
                   name="message"
+                  rows={5}
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows={5}
-                  placeholder="How can we help you?"
-                  className="w-full bg-ink border border-border-card rounded-md px-4 py-2.5 text-text-primary text-sm focus:outline-none focus:border-accent-signal transition-all resize-none"
+                  placeholder="Write your query here..."
+                  className="w-full bg-slate-50 border border-[#D2E0EE] rounded-lg px-4 py-2.5 text-[#002060] placeholder-[#476282]/50 text-sm focus:outline-none focus:border-[#2563EB] transition-all resize-none font-semibold"
                 />
               </div>
 
@@ -120,49 +120,47 @@ export default function ContactPage() {
                 <Button
                   type="submit"
                   variant="primary"
-                  fullWidth
                   disabled={loading || !formData.name || !formData.email || !formData.message}
-                  className="gap-2"
+                  className="w-full sm:w-auto px-6 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold h-11"
                 >
-                  <Send className="w-4 h-4" />
-                  {loading ? 'Sending...' : 'Send Message'}
+                  {loading ? 'Sending Message...' : 'Send Message'}
                 </Button>
               </div>
             </form>
           </Card>
         </div>
 
-        {/* Sidebar Info */}
+        {/* Contact Info Sidebar */}
         <div className="space-y-6">
-          <Card hoverEffect={false} className="space-y-5">
-            <h4 className="font-display font-bold text-base text-text-primary">
-              Contact Details
-            </h4>
-            <p className="text-xs text-text-muted leading-relaxed font-sans">
-              AI Submit 2026 is managed by the engineering and academic curriculum teams at UNAI Tech.
+          <Card hoverEffect={false} className="space-y-5 bg-white border-[#D2E0EE] shadow-sm">
+            <h3 className="font-display font-bold text-base text-[#002060] border-b border-slate-100 pb-2">
+              Organiser Contact
+            </h3>
+            <p className="text-xs text-slate-600 leading-relaxed font-sans font-medium">
+              AI Summit 2026 is managed by the engineering and academic curriculum teams at unAi Tech Pvt. Ltd.
             </p>
 
             <div className="space-y-4 pt-2">
-              <div className="flex items-start space-x-3 text-xs md:text-sm text-text-muted">
-                <Mail className="w-5 h-5 text-accent-signal shrink-0 mt-0.5" />
+              <div className="flex items-start space-x-3 text-xs md:text-sm text-slate-600 font-medium">
+                <Mail className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                 <div>
-                  <h5 className="font-display font-bold text-xs text-text-primary">General Inquiries</h5>
-                  <p className="font-mono mt-0.5">hello@unaitech.com</p>
+                  <h5 className="font-display font-bold text-xs text-[#002060]">General Inquiries</h5>
+                  <p className="font-mono mt-0.5">contact@unaitech.com</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 text-xs md:text-sm text-text-muted">
-                <Phone className="w-5 h-5 text-accent-signal shrink-0 mt-0.5" />
+              <div className="flex items-start space-x-3 text-xs md:text-sm text-slate-600 font-medium">
+                <Phone className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                 <div>
-                  <h5 className="font-display font-bold text-xs text-text-primary">Phone Support</h5>
-                  <p className="font-mono mt-0.5">+91 98765 43210</p>
+                  <h5 className="font-display font-bold text-xs text-[#002060]">Phone Support</h5>
+                  <p className="font-mono mt-0.5">+91 90439 88697</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 text-xs md:text-sm text-text-muted">
-                <MapPin className="w-5 h-5 text-accent-signal shrink-0 mt-0.5" />
+              <div className="flex items-start space-x-3 text-xs md:text-sm text-slate-600 font-medium">
+                <MapPin className="w-5 h-5 text-[#2563EB] shrink-0 mt-0.5" />
                 <div>
-                  <h5 className="font-display font-bold text-xs text-text-primary">Headquarters</h5>
+                  <h5 className="font-display font-bold text-xs text-[#002060]">Headquarters</h5>
                   <p className="mt-0.5 font-sans">IITM Research Park, Chennai, India</p>
                 </div>
               </div>

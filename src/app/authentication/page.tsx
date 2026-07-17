@@ -168,48 +168,48 @@ export default function AuthenticationPage() {
   };
 
   const getOverlayStyles = () => {
-    if (processing) return 'border-border-card bg-surface/90 text-text-primary';
-    if (!lastScanResult) return 'border-border-card bg-surface/95';
+    if (processing) return 'border-[#D2E0EE] bg-white/95 text-[#002060]';
+    if (!lastScanResult) return 'border-[#D2E0EE] bg-white/95';
 
     switch (lastScanResult.resultType) {
       case 'success':
-        return 'border-emerald-500/50 bg-emerald-950/90 text-emerald-300';
+        return 'border-emerald-500/50 bg-emerald-50/95 text-emerald-950';
       case 'already_used':
-        return 'border-amber-500/50 bg-amber-950/90 text-amber-300';
+        return 'border-amber-500/50 bg-amber-50/95 text-amber-950';
       case 'expired':
-        return 'border-red-500/50 bg-red-950/90 text-red-300';
+        return 'border-red-500/50 bg-red-50/95 text-red-950';
       default:
-        return 'border-red-500/50 bg-red-950/90 text-red-300';
+        return 'border-red-500/50 bg-red-50/95 text-red-950';
     }
   };
 
   const getResultIcon = () => {
-    if (processing) return <Cpu className="w-12 h-12 text-accent-signal animate-spin" />;
+    if (processing) return <Cpu className="w-12 h-12 text-[#2563EB] animate-spin" />;
     if (!lastScanResult) return null;
 
     switch (lastScanResult.resultType) {
       case 'success':
-        return <CheckCircle className="w-16 h-16 text-emerald-400" />;
+        return <CheckCircle className="w-16 h-16 text-emerald-600" />;
       case 'already_used':
-        return <AlertTriangle className="w-16 h-16 text-amber-400" />;
+        return <AlertTriangle className="w-16 h-16 text-amber-600" />;
       default:
-        return <XCircle className="w-16 h-16 text-red-400" />;
+        return <XCircle className="w-16 h-16 text-red-600" />;
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 space-y-10">
       {/* Header section */}
-      <div className="border-b border-border-card pb-6 flex items-center justify-between">
+      <div className="border-b border-[#D2E0EE] pb-6 flex items-center justify-between">
         <div>
-          <span className="font-mono text-xs uppercase tracking-wider text-accent-ember font-semibold bg-accent-ember/10 px-2 py-0.5 border border-accent-ember/20 rounded">
+          <span className="font-mono text-xs uppercase tracking-wider text-[#0B3A82] font-bold bg-[#0B3A82]/10 px-2 py-0.5 border border-[#0B3A82]/20 rounded">
             DOOR SCANNING TOOL
           </span>
-          <h1 className="font-display text-2xl md:text-3xl font-bold text-text-primary mt-2">
+          <h1 className="font-display text-2xl md:text-3xl font-black text-[#002060] mt-2 uppercase">
             Attendee Verification Terminal
           </h1>
         </div>
-        <Button variant="secondary" size="sm" onClick={() => router.push('/admin')}>
+        <Button variant="secondary" size="sm" onClick={() => router.push('/admin')} className="border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50 font-bold">
           Admin Dashboard
         </Button>
       </div>
@@ -218,28 +218,28 @@ export default function AuthenticationPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         
         {/* Scanner Panel */}
-        <Card hoverEffect={false} className="p-6 space-y-6 relative min-h-[380px] flex flex-col justify-between">
-          <div className="space-y-4">
-            <h3 className="font-display font-bold text-base md:text-lg text-text-primary border-b border-border-card pb-2 flex items-center gap-2">
-              <Camera className="w-5 h-5 text-accent-signal" />
+        <Card hoverEffect={false} className="p-6 space-y-6 relative min-h-[380px] flex flex-col justify-between bg-white border-[#D2E0EE] shadow-sm">
+          <div className="space-y-4 text-left">
+            <h3 className="font-display font-bold text-base md:text-lg text-[#002060] border-b border-slate-100 pb-2 flex items-center gap-2">
+              <Camera className="w-5 h-5 text-[#2563EB]" />
               QR Reader Viewport
             </h3>
 
             {permissionError && (
-              <div className="p-4 rounded bg-red-500/5 border border-red-500/20 text-red-400 text-xs flex items-center space-x-2">
-                <ShieldAlert className="w-5 h-5 shrink-0" />
+              <div className="p-4 rounded bg-red-50 border border-red-200 text-red-800 text-xs flex items-center space-x-2 font-semibold">
+                <ShieldAlert className="w-5 h-5 shrink-0 text-red-600" />
                 <span>{permissionError}</span>
               </div>
             )}
 
             {/* Viewfinder display */}
-            <div className="bg-ink border border-border-card rounded-md aspect-square max-w-[280px] mx-auto overflow-hidden flex items-center justify-center relative">
+            <div className="bg-slate-50 border border-[#D2E0EE] rounded-xl aspect-square max-w-[280px] mx-auto overflow-hidden flex items-center justify-center relative">
               {scanning ? (
                 <div id="qr-reader" className="w-full h-full" />
               ) : (
                 <div className="text-center p-6 flex flex-col items-center space-y-3.5">
-                  <Scan className="w-12 h-12 text-text-muted animate-pulse" />
-                  <p className="text-[11px] font-mono text-text-muted">
+                  <Scan className="w-12 h-12 text-[#476282] animate-pulse" />
+                  <p className="text-[11px] font-mono text-[#476282] font-semibold">
                     Camera is currently offline
                   </p>
                 </div>
@@ -250,11 +250,11 @@ export default function AuthenticationPage() {
           {/* Trigger controls */}
           <div className="pt-4">
             {scanning ? (
-              <Button variant="secondary" fullWidth onClick={stopScanner}>
+              <Button variant="secondary" fullWidth onClick={stopScanner} className="border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50 font-bold">
                 Turn Camera Off
               </Button>
             ) : (
-              <Button variant="primary" fullWidth onClick={startScanner} className="gap-2">
+              <Button variant="primary" fullWidth onClick={startScanner} className="gap-2 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold">
                 <Camera className="w-4.5 h-4.5" />
                 Activate Camera
               </Button>
@@ -263,10 +263,10 @@ export default function AuthenticationPage() {
 
           {/* Scan result overlay */}
           {showResultPanel && (
-            <div className={`absolute inset-0 z-20 border rounded-lg p-6 flex flex-col items-center justify-center text-center transition-all ${getOverlayStyles()}`}>
+            <div className={`absolute inset-0 z-20 border rounded-xl p-6 flex flex-col items-center justify-center text-center transition-all ${getOverlayStyles()}`}>
               <button
                 onClick={() => setShowResultPanel(false)}
-                className="absolute top-4 right-4 text-text-muted hover:text-text-primary font-semibold text-sm cursor-pointer"
+                className="absolute top-4 right-4 text-slate-400 hover:text-[#002060] font-bold text-sm cursor-pointer"
               >
                 Close (Esc)
               </button>
@@ -280,16 +280,16 @@ export default function AuthenticationPage() {
               ) : (
                 lastScanResult && (
                   <div className="space-y-2 max-w-xs">
-                    <h3 className="font-display font-bold text-lg leading-tight">
+                    <h3 className="font-display font-bold text-lg leading-tight uppercase">
                       {lastScanResult.success ? 'Access Granted' : 'Access Denied'}
                     </h3>
-                    <p className="text-xs md:text-sm opacity-90 leading-relaxed font-sans">
+                    <p className="text-xs md:text-sm opacity-90 leading-relaxed font-sans font-medium">
                       {lastScanResult.message}
                     </p>
                     
                     {/* Additional meta */}
                     {lastScanResult.payload && (
-                      <div className="font-mono text-[10px] opacity-75 border-t border-white/10 pt-2 mt-2">
+                      <div className="font-mono text-[10px] opacity-75 border-t border-slate-200 pt-2 mt-2">
                         {lastScanResult.payload.attendeeName && (
                           <div>NAME: {lastScanResult.payload.attendeeName}</div>
                         )}
@@ -309,11 +309,11 @@ export default function AuthenticationPage() {
         </Card>
 
         {/* Manual Input & Audit History */}
-        <div className="space-y-6">
+        <div className="space-y-6 text-left">
           {/* Manual Input card */}
-          <Card hoverEffect={false} className="p-6 space-y-4">
-            <h3 className="font-display font-bold text-base md:text-lg text-text-primary border-b border-border-card pb-2 flex items-center gap-2">
-              <Keyboard className="w-5 h-5 text-accent-signal" />
+          <Card hoverEffect={false} className="p-6 space-y-4 bg-white border-[#D2E0EE] shadow-sm">
+            <h3 className="font-display font-bold text-base md:text-lg text-[#002060] border-b border-slate-100 pb-2 flex items-center gap-2">
+              <Keyboard className="w-5 h-5 text-[#2563EB]" />
               Manual Code Verification
             </h3>
 
@@ -323,40 +323,40 @@ export default function AuthenticationPage() {
                 placeholder="Enter QR token UUID..."
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
-                className="flex-grow bg-ink border border-border-card rounded px-3 py-2 text-text-primary text-xs font-mono focus:outline-none focus:border-accent-signal"
+                className="flex-grow bg-slate-50 border border-[#D2E0EE] rounded-lg px-3 py-2 text-[#002060] text-xs font-mono focus:outline-none focus:border-[#2563EB] font-semibold"
               />
-              <Button type="submit" variant="secondary" size="sm" className="h-10">
+              <Button type="submit" variant="secondary" size="sm" className="h-10 border-[#D2E0EE] text-[#002060] bg-white hover:bg-slate-50 font-bold">
                 Verify
               </Button>
             </form>
           </Card>
 
           {/* Audit Logs card */}
-          <Card hoverEffect={false} className="p-6 flex flex-col justify-between min-h-[300px]">
+          <Card hoverEffect={false} className="p-6 flex flex-col justify-between min-h-[300px] bg-white border-[#D2E0EE] shadow-sm">
             <div>
-              <h3 className="font-display font-bold text-base md:text-lg text-text-primary border-b border-border-card pb-2 flex items-center gap-2 mb-4">
-                <History className="w-5 h-5 text-accent-ember" />
+              <h3 className="font-display font-bold text-base md:text-lg text-[#002060] border-b border-slate-100 pb-2 flex items-center gap-2 mb-4">
+                <History className="w-5 h-5 text-[#0B3A82]" />
                 Live Verification Feed
               </h3>
 
               {logsError ? (
-                <p className="text-xs text-red-400 font-mono py-4">Failed to load scan feed.</p>
+                <p className="text-xs text-red-600 font-mono py-4">Failed to load scan feed.</p>
               ) : recentLogs.length === 0 ? (
-                <p className="text-xs text-text-muted font-mono py-6 text-center">No scans recorded today.</p>
+                <p className="text-xs text-slate-500 font-mono py-6 text-center font-semibold">No scans recorded today.</p>
               ) : (
                 <div className="space-y-3 font-sans text-xs max-h-[220px] overflow-y-auto pr-1">
                   {recentLogs.map((log) => (
                     <div
                       key={log.id}
-                      className="bg-ink border border-border-card/45 rounded p-2.5 flex items-center justify-between gap-3"
+                      className="bg-slate-50 border border-[#D2E0EE] rounded-xl p-2.5 flex items-center justify-between gap-3"
                     >
-                      <div className="space-y-0.5 truncate">
-                        <div className="font-semibold text-text-primary truncate">
+                      <div className="space-y-0.5 truncate text-left">
+                        <div className="font-bold text-[#002060] truncate">
                           {log.qr_type === 'individual'
                             ? log.attendee_name || 'Individual Pass'
                             : `${log.university_name || 'University'} Group`}
                         </div>
-                        <div className="font-mono text-[9px] text-text-muted flex items-center gap-1.5">
+                        <div className="font-mono text-[9px] text-[#476282] font-semibold flex items-center gap-1.5">
                           <span>{log.qr_type.toUpperCase()}</span>
                           <span>•</span>
                           <span>
