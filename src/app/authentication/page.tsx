@@ -12,7 +12,7 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { ScanLog } from '@/lib/types';
-import type { Html5QrcodeScanner } from 'html5-qrcode';
+import type { Html5Qrcode } from 'html5-qrcode';
 
 export default function AuthenticationPage() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function AuthenticationPage() {
   const [recentLogs, setRecentLogs] = useState<ScanLog[]>([]);
   const [logsError, setLogsError] = useState(false);
 
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const scannerRef = useRef<Html5Qrcode | null>(null);
   const resultTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadRecentLogs = async () => {
@@ -58,7 +58,7 @@ export default function AuthenticationPage() {
       clearTimeout(logTimer);
       if (scannerRef.current) {
         try {
-          scannerRef.current.clear();
+          scannerRef.current.stop().catch(() => {});
         } catch (e) {
           console.error('Scanner cleanup error:', e);
         }
@@ -74,29 +74,28 @@ export default function AuthenticationPage() {
 
     try {
       // Dynamically import to prevent SSR rendering issues
-      const { Html5QrcodeScanner } = await import('html5-qrcode');
+      const { Html5Qrcode } = await import('html5-qrcode');
 
       // Check if container exists
       const qrReader = document.getElementById('qr-reader');
       if (!qrReader) return;
 
-      const scanner = new Html5QrcodeScanner(
-        'qr-reader',
+      const html5QrCode = new Html5Qrcode('qr-reader');
+      scannerRef.current = html5QrCode;
+
+      await html5QrCode.start(
+        { facingMode: 'environment' },
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
-          rememberLastUsedCamera: true,
-          aspectRatio: 1.0,
         },
-        /* verbose= */ false
-      );
-
-      scannerRef.current = scanner;
-
-      scanner.render(
         async (decodedText) => {
           // Success callback
-          scanner.clear(); // stop scanner on successful decode
+          try {
+            await html5QrCode.stop();
+          } catch (e) {
+            console.error('Stop error on decode:', e);
+          }
           setScanning(false);
           await handleValidateScan(decodedText);
         },
@@ -115,7 +114,7 @@ export default function AuthenticationPage() {
   const stopScanner = async () => {
     if (scannerRef.current) {
       try {
-        await scannerRef.current.clear();
+        await scannerRef.current.stop();
         scannerRef.current = null;
       } catch (e) {
         console.error(e);
