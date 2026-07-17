@@ -3,18 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Cpu, ShieldAlert, CheckCircle, Info } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/components/providers/AuthProvider';
 import { completeRegistration } from '@/app/actions/register';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
-import { User } from '@supabase/supabase-js';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const supabase = createClient();
+  const { user, profile, loading: authLoading, signInWithGoogle, refreshProfile } = useAuth();
 
-  const [loading, setLoading] = useState(true);
-  const [sessionUser, setSessionUser] = useState<User | null>(null);
+  const [localLoading, setLocalLoading] = useState(false);
   const [needsProfile, setNeedsProfile] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -26,81 +24,37 @@ export default function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkProfile = async (userId: string) => {
-      try {
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .maybeSingle();
+    if (authLoading) return;
 
-        if (error) {
-          console.error('Profile fetch error:', error);
-          setErrorMsg('Could not fetch registration details.');
-          setLoading(false);
-          return;
-        }
-
-        if (!profile || !profile.phone || !profile.university) {
-          // Needs profile completion
-          setFormData({
-            fullName: profile?.full_name || sessionUser?.user_metadata?.full_name || sessionUser?.user_metadata?.name || '',
-            phone: profile?.phone || '',
-            university: profile?.university || '',
-            attendeeType: profile?.attendee_type || 'student',
-          });
-          setNeedsProfile(true);
-        } else {
-          // Profile is complete, direct to ticket
-          router.push('/ticket');
-        }
-      } catch (err) {
-        console.error(err);
-        setErrorMsg('Error checking account status.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Check current auth status
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setSessionUser(session.user);
-        checkProfile(session.user.id);
+    if (user) {
+      if (profile && profile.phone && profile.university) {
+        // Registration is complete, redirect to ticket page
+        router.push('/ticket');
       } else {
-        setLoading(false);
+        // Profile is incomplete
+        setFormData((prev) => ({
+          ...prev,
+          fullName: profile?.full_name || user.user_metadata?.full_name || user.user_metadata?.name || '',
+          phone: profile?.phone || '',
+          university: profile?.university || '',
+          attendeeType: profile?.attendee_type || 'student',
+        }));
+        setNeedsProfile(true);
       }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        setSessionUser(session.user);
-        checkProfile(session.user.id);
-      } else {
-        setSessionUser(null);
-        setNeedsProfile(false);
-        setLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase, router, sessionUser?.user_metadata?.full_name, sessionUser?.user_metadata?.name]);
+    } else {
+      setNeedsProfile(false);
+    }
+  }, [user, profile, authLoading, router]);
 
   const handleGoogleSignIn = async () => {
-    setLoading(true);
+    setLocalLoading(true);
     setErrorMsg(null);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/register`,
-        },
-      });
-      if (error) throw error;
+      await signInWithGoogle();
     } catch (err: unknown) {
       console.error('OAuth Error:', err);
       setErrorMsg(err instanceof Error ? err.message : 'Failed to authenticate with Google.');
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -125,14 +79,17 @@ export default function RegisterPage() {
       attendeeType: formData.attendeeType,
     });
 
-    setSubmitting(false);
-
     if (res.success) {
+      // Trigger AuthProvider profile refresh
+      await refreshProfile();
       router.push('/ticket');
     } else {
       setErrorMsg(res.error || 'Failed to complete registration.');
+      setSubmitting(false);
     }
   };
+
+  const loading = authLoading || localLoading;
 
   if (loading) {
     return (
@@ -170,7 +127,7 @@ export default function RegisterPage() {
           )}
 
           {/* Flow 1: Not Signed In — Show Google OAuth button */}
-          {!sessionUser && (
+          {!user && (
             <div className="space-y-6">
               <div className="text-center">
                 <h3 className="font-display font-bold text-sm text-text-primary">
@@ -206,7 +163,7 @@ export default function RegisterPage() {
           )}
 
           {/* Flow 2: Signed In but profile incomplete — Show details form */}
-          {sessionUser && needsProfile && (
+          {user && needsProfile && (
             <div>
               <div className="text-center mb-6">
                 <div className="inline-flex items-center space-x-1.5 text-xs text-emerald-400 font-semibold mb-2">

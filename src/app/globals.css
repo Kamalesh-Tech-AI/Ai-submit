@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0A0B10; /* ink background */
-  --color-foreground: #F4F5F8; /* text-primary */
+  --color-background: #FFFFFF; /* white background */
+  --color-foreground: #0B132B; /* deep blue-grey text */
   
-  --color-ink: #0A0B10;
-  --color-surface: #13151D;
-  --color-border-card: #262A38;
-  --color-text-primary: #F4F5F8;
-  --color-text-muted: #878C9E;
-  --color-accent-signal: #4E6BFF;
-  --color-accent-ember: #E7A93E;
+  --color-ink: #F4F6F9; /* soft light grey-blue page background */
+  --color-surface: #FFFFFF; /* white card panels */
+  --color-border-card: #D2E0EE; /* light blue-grey border */
+  --color-text-primary: #002060; /* deep navy blue from poster */
+  --color-text-muted: #476282; /* slate blue */
+  --color-accent-signal: #2563EB; /* vibrant royal blue */
+  --color-accent-ember: #0B3A82; /* medium-dark poster blue */
   
   --font-display: var(--font-space-grotesk), sans-serif;
   --font-sans: var(--font-ibm-plex-sans), sans-serif;
@@ -47,53 +47,53 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom scrollbar to match deep theme */
+/* Custom scrollbar to match clean theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0B10;
+  background: var(--color-ink);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262A38;
+  background: var(--color-border-card);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4E6BFF;
+  background: var(--color-accent-signal);
 }
 
 /* Circuit grid pattern background */
 .circuit-grid {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(38, 42, 56, 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(38, 42, 56, 0.2) 1px, transparent 1px);
+    linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
 }
 
 /* Custom focus ring styling for accessibility */
 *:focus-visible {
-  outline: 2px solid #4E6BFF;
+  outline: 2px solid var(--color-accent-signal);
   outline-offset: 4px;
 }
 
 /* Glass panel */
 .glass-panel {
-  background: rgba(19, 21, 29, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(38, 42, 56, 0.5);
+  border: 1px solid rgba(209, 223, 233, 0.4);
 }
 
 /* Constellation connection glow */
 .glow-signal {
-  filter: drop-shadow(0 0 8px rgba(78, 107, 255, 0.6));
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.4));
 }
 
 .glow-ember {
-  filter: drop-shadow(0 0 8px rgba(231, 169, 62, 0.6));
+  filter: drop-shadow(0 0 8px rgba(11, 58, 130, 0.4));
 }
 
 /* Respect reduced motion preference */

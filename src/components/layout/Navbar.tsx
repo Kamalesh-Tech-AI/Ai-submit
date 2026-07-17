@@ -1,62 +1,21 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Cpu, LogOut, Ticket, Settings, Scan } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/components/providers/AuthProvider';
 import Button from '../ui/Button';
-
-import { User } from '@supabase/supabase-js';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [role, setRole] = useState<string | null>(null);
+  const { user, profile, signOut } = useAuth();
   const pathname = usePathname();
-  const supabase = createClient();
 
-  useEffect(() => {
-    const fetchRole = async (userId: string) => {
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', userId)
-          .single();
-        if (data && !error) {
-          setRole(data.role);
-        }
-      } catch (err) {
-        console.error('Error fetching role in Navbar:', err);
-      }
-    };
-
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchRole(session.user.id);
-      }
-    });
-
-    // Listen to changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          fetchRole(session.user.id);
-        } else {
-          setRole(null);
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [supabase]);
+  const role = profile?.role || null;
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     window.location.href = '/';
   };
 

@@ -44,7 +44,7 @@ export default function CircuitBackground() {
       draw(context: CanvasRenderingContext2D) {
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        context.fillStyle = 'rgba(78, 107, 255, 0.4)'; // signal blue tint
+        context.fillStyle = 'rgba(37, 99, 235, 0.2)'; // royal blue tint
         context.fill();
       }
     }
@@ -86,7 +86,7 @@ export default function CircuitBackground() {
             ctx.lineTo(nodes[j].x, nodes[j].y);
             // Opacity falls off as distance increases
             const alpha = (1 - dist / 120) * 0.12;
-            ctx.strokeStyle = `rgba(78, 107, 255, ${alpha})`;
+            ctx.strokeStyle = `rgba(37, 99, 235, ${alpha * 0.8})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -98,7 +98,7 @@ export default function CircuitBackground() {
       ctx.clearRect(0, 0, width, height);
 
       // Draw grids
-      ctx.strokeStyle = 'rgba(38, 42, 56, 0.05)';
+      ctx.strokeStyle = 'rgba(37, 99, 235, 0.03)';
       ctx.lineWidth = 0.5;
       const gridSize = 40;
       for (let x = 0; x < width; x += gridSize) {
@@ -138,8 +138,7 @@ export default function CircuitBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none opacity-45"
-      style={{ mixBlendMode: 'screen' }}
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-25"
     />
   );
 }

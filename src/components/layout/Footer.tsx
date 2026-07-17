@@ -79,11 +79,11 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-text-muted">
               <li className="flex items-start space-x-2.5">
                 <Mail className="w-4.5 h-4.5 text-accent-signal shrink-0 mt-0.5" />
-                <span className="break-all">hello@unaitech.com</span>
+                <span className="break-all">contact@unaitech.com</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <Phone className="w-4.5 h-4.5 text-accent-signal shrink-0 mt-0.5" />
-                <span>+91 98765 43210</span>
+                <span>+91 90439 88697</span>
               </li>
               <li className="flex items-start space-x-2.5">
                 <MapPin className="w-4.5 h-4.5 text-accent-signal shrink-0 mt-0.5" />

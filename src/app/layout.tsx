@@ -3,6 +3,7 @@ import { Space_Grotesk, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -58,11 +59,13 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} ${jetbrainsMono.variable} h-full scroll-smooth antialiased`}
     >
       <body className="bg-ink text-text-primary min-h-full flex flex-col font-sans selection:bg-accent-signal selection:text-white">
-        <Navbar />
-        <main className="flex-grow flex flex-col">
-          {children}
-        </main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-grow flex flex-col">
+            {children}
+          </main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

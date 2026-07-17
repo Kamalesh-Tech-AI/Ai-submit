@@ -44,7 +44,7 @@ export default function AgendaPage() {
                 : 'text-text-muted hover:text-text-primary'
             }`}
           >
-            DAY 1 — FEB 15
+            DAY 1 — AUG 20
           </button>
           <button
             onClick={() => setSelectedDay(2)}
@@ -54,7 +54,7 @@ export default function AgendaPage() {
                 : 'text-text-muted hover:text-text-primary'
             }`}
           >
-            DAY 2 — FEB 16
+            DAY 2 — AUG 21
           </button>
         </div>
       </div>

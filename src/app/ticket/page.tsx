@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Cpu, Calendar, MapPin, CheckCircle, Info, Ticket } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/components/providers/AuthProvider';
 import QRDisplay from '@/components/ui/QRDisplay';
 import Card from '@/components/ui/Card';
 
@@ -23,20 +24,22 @@ interface TicketDetails {
 export default function TicketPage() {
   const router = useRouter();
   const supabase = createClient();
+  const { user, loading: authLoading } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [ticketData, setTicketData] = useState<TicketDetails | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
+    if (authLoading) return;
+
+    if (!user) {
+      router.push('/register');
+      return;
+    }
+
     const fetchTicket = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.user) {
-          router.push('/register');
-          return;
-        }
-
         // Fetch profile and registration
         const { data: registration, error: regError } = await supabase
           .from('registrations')
@@ -52,7 +55,7 @@ export default function TicketPage() {
               attendee_type
             )
           `)
-          .eq('user_id', session.user.id)
+          .eq('user_id', user.id)
           .maybeSingle();
 
         if (regError) {
@@ -102,9 +105,11 @@ export default function TicketPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, router]);
+  }, [supabase, router, user, authLoading]);
 
-  if (loading) {
+  const displayLoading = authLoading || loading;
+
+  if (displayLoading) {
     return (
       <div className="flex-grow flex items-center justify-center min-h-[50vh]">
         <div className="flex flex-col items-center space-y-4">
@@ -214,7 +219,7 @@ export default function TicketPage() {
                     Entry instructions
                   </h4>
                   <p className="text-[11px] leading-relaxed mt-0.5">
-                    Show this QR code to the event staff at the IIT Madras Research Park entrance on Feb 15. Single-use only.
+                    Show this QR code to the event staff at the IIT Madras Research Park entrance on Aug 20. Single-use only.
                   </p>
                 </div>
               </div>
@@ -225,7 +230,7 @@ export default function TicketPage() {
           <div className="bg-ink border-t border-border-card px-6 py-4 flex justify-between items-center text-[10px] font-mono text-text-muted">
             <div className="flex items-center space-x-1">
               <Calendar className="w-3.5 h-3.5 text-accent-signal" />
-              <span>FEB 15 & 16</span>
+              <span>AUG 20 & 21</span>
             </div>
             <div className="flex items-center space-x-1">
               <MapPin className="w-3.5 h-3.5 text-accent-signal" />
