@@ -47,7 +47,7 @@ export default function AdminPage() {
     try {
       const statsRes = await getAdminStats();
       if ('error' in statsRes) {
-        setErrorMsg(statsRes.error);
+        setErrorMsg(statsRes.error || 'An error occurred.');
         setLoading(false);
         return;
       }
