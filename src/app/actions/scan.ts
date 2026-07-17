@@ -69,35 +69,23 @@ export async function validateScan(scannedText: string): Promise<ScanResult> {
   }
 
   try {
-    // 3. Process scan based on type
-    if (type === 'individual') {
-      // Fetch registration + profile using service client
-      const { data: registration, error: regError } = await adminSupabase
-        .from('registrations')
-        .select(`
-          id,
-          checked_in,
-          checked_in_at,
-          profiles:user_id (
-            full_name,
-            email,
-            university
-          )
-        `)
-        .eq('qr_token', token)
-        .maybeSingle();
+    // 3. Process scan: Check if this token belongs to an individual attendee first
+    const { data: registration, error: regError } = await adminSupabase
+      .from('registrations')
+      .select(`
+        id,
+        checked_in,
+        checked_in_at,
+        profiles:user_id (
+          full_name,
+          email,
+          university
+        )
+      `)
+      .eq('qr_token', token)
+      .maybeSingle();
 
-      if (regError || !registration) {
-        // Log invalid scan
-        await adminSupabase.from('scan_logs').insert({
-          qr_token: token,
-          qr_type: 'individual',
-          result: 'invalid',
-          scanned_by: user.id,
-        });
-        return { success: false, resultType: 'invalid', message: 'Registration not found.' };
-      }
-
+    if (!regError && registration) {
       interface ProfileJoined {
         full_name: string | null;
         university: string | null;
@@ -167,25 +155,16 @@ export async function validateScan(scannedText: string): Promise<ScanResult> {
           checkedInAt: checkInTime,
         }
       };
+    }
 
-    } else {
-      // Bulk QR code check
-      const { data: bulkCode, error: bulkError } = await adminSupabase
-        .from('bulk_qr_codes')
-        .select('*')
-        .eq('qr_token', token)
-        .maybeSingle();
+    // 4. Check if it is a bulk group code
+    const { data: bulkCode, error: bulkError } = await adminSupabase
+      .from('bulk_qr_codes')
+      .select('*')
+      .eq('qr_token', token)
+      .maybeSingle();
 
-      if (bulkError || !bulkCode) {
-        await adminSupabase.from('scan_logs').insert({
-          qr_token: token,
-          qr_type: 'bulk',
-          result: 'invalid',
-          scanned_by: user.id,
-        });
-        return { success: false, resultType: 'invalid', message: 'Bulk code not found.' };
-      }
-
+    if (!bulkError && bulkCode) {
       const universityName = bulkCode.university_name;
       const limit = bulkCode.max_limit;
 
@@ -263,6 +242,16 @@ export async function validateScan(scannedText: string): Promise<ScanResult> {
         }
       };
     }
+
+    // 5. Neither individual nor bulk code matched
+    await adminSupabase.from('scan_logs').insert({
+      qr_token: null,
+      qr_type: type,
+      result: 'invalid',
+      scanned_by: user.id,
+    });
+    return { success: false, resultType: 'invalid', message: 'QR Code/Token not found in database.' };
+
   } catch (error: unknown) {
     console.error('Scan validation server action failed:', error);
     return { success: false, resultType: 'invalid', message: error instanceof Error ? error.message : 'An unexpected error occurred.' };
