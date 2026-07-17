@@ -66,3 +66,25 @@ export interface AgendaItem {
   track: 'Skill Building' | 'Tech Innovation' | 'Keynote' | 'Interactive';
   day: 1 | 2;
 }
+
+export interface NotificationTemplate {
+  id: string;
+  name: string;
+  slug: string;
+  message_body: string;
+  category: 'general' | 'reminder' | 'update' | 'seating';
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface NotificationLog {
+  id: string;
+  template_id: string;
+  template_name: string;
+  message_sent: string;
+  recipient_count: number;
+  filter_criteria: Record<string, string>;
+  status: 'sent' | 'failed' | 'partial';
+  sent_by: string;
+  sent_at: string;
+}

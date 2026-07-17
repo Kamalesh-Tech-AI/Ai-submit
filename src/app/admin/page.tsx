@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Users, CheckCircle, Ticket, Plus, Download,
-  Search, ShieldAlert, Cpu, Ban, QrCode, Lock, Mail, Eye, EyeOff
+  Search, ShieldAlert, Cpu, Ban, QrCode, Lock, Mail, Eye, EyeOff,
+  MessageSquare, Send, ArrowRight
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 import {
@@ -389,6 +390,32 @@ export default function AdminPage() {
             <div className="bg-slate-50 p-3 rounded-lg border border-[#D2E0EE]">{m.icon}</div>
           </div>
         ))}
+      </div>
+
+      {/* WhatsApp Notification Quick Action */}
+      <div
+        onClick={() => router.push('/admin/notifications')}
+        className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-6 flex items-center justify-between hover:shadow-lg hover:shadow-emerald-100 transition-all cursor-pointer group"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="bg-emerald-600 p-3.5 rounded-xl shadow-md shadow-emerald-200 group-hover:scale-110 transition-transform">
+            <MessageSquare className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="font-display font-black text-lg text-[#002060] uppercase">
+              WhatsApp Mass Notifications
+            </h3>
+            <p className="text-xs text-slate-600 font-semibold mt-1">
+              Send time reminders, chief guest updates, seating alerts & custom announcements to all registered attendees via N8N.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span className="hidden md:inline-block text-xs font-bold text-emerald-700 uppercase tracking-wider">Open Center</span>
+          <div className="bg-white border border-emerald-200 rounded-lg p-2 group-hover:bg-emerald-600 group-hover:border-emerald-600 transition-colors">
+            <ArrowRight className="w-4 h-4 text-emerald-600 group-hover:text-white transition-colors" />
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

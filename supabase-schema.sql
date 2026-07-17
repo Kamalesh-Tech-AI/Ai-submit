@@ -161,3 +161,88 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+
+-- ============================================
+-- 7. NOTIFICATION TEMPLATES
+-- ============================================
+create table if not exists public.notification_templates (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text unique not null,
+  message_body text not null,
+  category text default 'general',  -- general | reminder | update | seating
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+alter table public.notification_templates enable row level security;
+
+drop policy if exists "Staff can manage notification templates" on public.notification_templates;
+create policy "Staff can manage notification templates"
+  on public.notification_templates for all using (public.is_staff());
+
+
+-- ============================================
+-- 8. NOTIFICATION LOGS
+-- ============================================
+create table if not exists public.notification_logs (
+  id uuid primary key default gen_random_uuid(),
+  template_id uuid references public.notification_templates(id),
+  template_name text not null,
+  message_sent text not null,
+  recipient_count int not null,
+  filter_criteria jsonb,
+  status text default 'sent',  -- sent | failed | partial
+  sent_by uuid references public.profiles(id),
+  sent_at timestamptz default now()
+);
+
+alter table public.notification_logs enable row level security;
+
+drop policy if exists "Staff can manage notification logs" on public.notification_logs;
+create policy "Staff can manage notification logs"
+  on public.notification_logs for all using (public.is_staff());
+
+
+-- ============================================
+-- 9. SEED DEFAULT NOTIFICATION TEMPLATES
+-- ============================================
+insert into public.notification_templates (name, slug, message_body, category) values
+  (
+    '⏰ Time Reminder',
+    'time_reminder',
+    '🕐 Reminder: AI Submit 2026 starts in {{hours_until}} hours! Registration opens at 9:00 AM on {{event_date}} at {{venue}}. Don''t forget your QR pass! 🎫',
+    'reminder'
+  ),
+  (
+    '🎤 Chief Guest Update',
+    'chief_guest_update',
+    '🌟 Exciting Update! {{guest_name}} ({{guest_designation}}, {{guest_org}}) will be speaking at AI Submit 2026. Don''t miss their session: "{{session_title}}" at {{session_time}}! 🎓',
+    'update'
+  ),
+  (
+    '💺 Seating Reminder',
+    'seating_reminder',
+    '📍 Seating Reminder: Please be seated by {{session_time}} for the upcoming session "{{session_title}}". Hall doors close 5 minutes after start time. See you inside! 🏛️',
+    'seating'
+  ),
+  (
+    '📢 General Announcement',
+    'general_announcement',
+    '📢 AI Submit 2026 Update: {{custom_message}}',
+    'general'
+  ),
+  (
+    '✅ Check-in Reminder',
+    'checkin_reminder',
+    '🎫 Don''t forget to check in! Show your QR code at the registration desk when you arrive at AI Submit 2026. See you at {{venue}} on {{event_date}}! ✨',
+    'reminder'
+  ),
+  (
+    '🎉 Event Day Welcome',
+    'event_day_welcome',
+    '🎉 Welcome to AI Submit 2026, {{attendee_name}}! Today''s highlights: {{day_highlights}}. WiFi: AISubmit2026 | Support: Help Desk near Registration. Enjoy! 🚀',
+    'general'
+  )
+on conflict (slug) do nothing;
