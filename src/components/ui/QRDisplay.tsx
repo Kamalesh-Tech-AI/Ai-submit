@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import Button from './Button';
 import { Download } from 'lucide-react';
 
@@ -14,20 +14,23 @@ interface QRDisplayProps {
 }
 
 export default function QRDisplay({ value, size = 200, label, onDownload, downloading = false }: QRDisplayProps) {
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const downloadQR = () => {
     if (onDownload) {
       onDownload();
       return;
     }
-    const canvas = canvasRef.current?.querySelector('canvas');
-    if (!canvas) return;
+    const svg = containerRef.current?.querySelector('svg');
+    if (!svg) return;
 
-    const pngUrl = canvas.toDataURL('image/png');
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    
     const downloadLink = document.createElement('a');
-    downloadLink.href = pngUrl;
-    downloadLink.download = `${label || 'ai-submit-pass'}.png`;
+    downloadLink.href = svgUrl;
+    downloadLink.download = `${label || 'ai-submit-pass'}.svg`;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -41,8 +44,8 @@ export default function QRDisplay({ value, size = 200, label, onDownload, downlo
       <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-accent-signal" />
       <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-accent-signal" />
 
-      <div ref={canvasRef} className="bg-white p-4 rounded-lg shadow-inner">
-        <QRCodeCanvas
+      <div ref={containerRef} className="bg-white p-4 rounded-lg shadow-inner">
+        <QRCodeSVG
           value={value}
           size={size}
           level="H"
