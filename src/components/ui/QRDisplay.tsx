@@ -9,12 +9,18 @@ interface QRDisplayProps {
   value: string;
   size?: number;
   label?: string;
+  onDownload?: () => void;
+  downloading?: boolean;
 }
 
-export default function QRDisplay({ value, size = 200, label }: QRDisplayProps) {
+export default function QRDisplay({ value, size = 200, label, onDownload, downloading = false }: QRDisplayProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const downloadQR = () => {
+    if (onDownload) {
+      onDownload();
+      return;
+    }
     const canvas = canvasRef.current?.querySelector('canvas');
     if (!canvas) return;
 
@@ -42,7 +48,7 @@ export default function QRDisplay({ value, size = 200, label }: QRDisplayProps) 
           level="H"
           includeMargin={true}
           imageSettings={{
-            src: 'https://unaitech.com/favicon.ico', // Fallback or brand logo in center
+            src: 'https://unaitech.com/favicon.ico',
             x: undefined,
             y: undefined,
             height: 24,
@@ -52,20 +58,15 @@ export default function QRDisplay({ value, size = 200, label }: QRDisplayProps) 
         />
       </div>
 
-      <div className="mt-4 text-center">
-        <p className="text-xs font-mono text-text-muted select-all">
-          TOKEN: {value.length > 20 ? `${value.substring(0, 8)}...` : value}
-        </p>
-      </div>
-
       <Button
         variant="secondary"
         size="sm"
-        className="mt-4 gap-2 text-xs"
+        className="mt-4 gap-2 text-xs no-export"
         onClick={downloadQR}
+        disabled={downloading}
       >
-        <Download className="w-4.5 h-4.5" />
-        Download Pass
+        <Download className="w-4 h-4" />
+        {downloading ? 'Downloading Card...' : 'Download Pass'}
       </Button>
     </div>
   );
