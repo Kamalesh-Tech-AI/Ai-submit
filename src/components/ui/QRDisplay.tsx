@@ -48,7 +48,7 @@ export default function QRDisplay({ value, size = 200, label, onDownload, downlo
           level="H"
           includeMargin={true}
           imageSettings={{
-            src: 'https://unaitech.com/favicon.ico',
+            src: '/images/qr_logo.png',
             x: undefined,
             y: undefined,
             height: 24,

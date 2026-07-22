@@ -114,10 +114,10 @@ export default function TicketPage() {
     setDownloadingPass(true);
     try {
       const dataUrl = await toPng(cardRef.current, {
-        cacheBust: true,
+        cacheBust: false,
         pixelRatio: 2,
         filter: (node) => {
-          // Hide elements marked with 'no-export' class during export if needed
+          // Hide elements marked with 'no-export' class during export
           return !node.classList?.contains('no-export');
         },
       });
