@@ -191,8 +191,8 @@ export default function RegisterPage() {
       {/* Top Header Bar */}
       <header className="w-full max-w-6xl px-6 py-4 flex items-center justify-between border-b border-neutral-900">
         <div className="flex items-center space-x-1 font-black tracking-wider text-lg md:text-xl">
-          <span className="text-red-600 font-extrabold">CH</span>
-          <span className="text-white">TEST CINEMA</span>
+          <span className="text-red-600 font-extrabold">AI</span>
+          <span className="text-white">SUMMIT CINEMA</span>
         </div>
         <button className="text-amber-400 p-1 hover:text-amber-300 transition-colors" aria-label="Menu">
           <Menu className="w-6 h-6" />

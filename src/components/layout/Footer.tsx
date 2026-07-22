@@ -14,7 +14,7 @@ export default function Footer() {
                 <Cpu className="w-4.5 h-4.5 text-white" />
               </div>
               <span className="font-display font-black text-lg tracking-wider text-[#002060]">
-                AI SUBMIT <span className="text-[#2563EB]">2026</span>
+                AI SUMMIT <span className="text-[#2563EB]">2026</span>
               </span>
             </Link>
             <p className="text-[#476282] text-sm max-w-sm leading-relaxed font-medium">
@@ -100,7 +100,7 @@ export default function Footer() {
               Contact Us
             </Link>
             <span className="text-[#D2E0EE]">|</span>
-            <span className="hover:text-[#002060] cursor-default font-bold">AI Submit 2026 Chennai</span>
+            <span className="hover:text-[#002060] cursor-default font-bold">AI Summit 2026 Chennai</span>
           </div>
         </div>
       </div>

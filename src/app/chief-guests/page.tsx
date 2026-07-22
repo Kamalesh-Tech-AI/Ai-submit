@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 
 export const metadata: Metadata = {
   title: 'Chief Guests & Speakers',
-  description: 'Meet the industry experts and researchers keynoting and teaching at AI Submit 2026 in Chennai.',
+  description: 'Meet the industry experts and researchers keynoting and teaching at AI Summit 2026 in Chennai.',
 };
 
 export default function ChiefGuestsPage() {

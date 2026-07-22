@@ -221,7 +221,7 @@ export default function TicketPage() {
                 <QRDisplay
                   value={qrPayload}
                   size={180}
-                  label={`${profile?.full_name?.toLowerCase().replace(/\s+/g, '-') || 'pass'}-ai-submit-pass`}
+                  label={`${profile?.full_name?.toLowerCase().replace(/\s+/g, '-') || 'pass'}-ai-summit-pass`}
                   onDownload={handleDownloadCard}
                   downloading={downloadingPass}
                 />

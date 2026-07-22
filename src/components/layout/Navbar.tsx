@@ -44,7 +44,7 @@ export default function Navbar() {
                 <Cpu className="w-5 h-5 text-white animate-pulse" />
               </div>
               <span className="font-display font-black text-lg md:text-xl tracking-wider text-[#002060]">
-                AI SUBMIT <span className="text-[#2563EB]">2026</span>
+                AI SUMMIT <span className="text-[#2563EB]">2026</span>
               </span>
             </Link>
           </div>

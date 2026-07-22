@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 
 export const metadata: Metadata = {
   title: 'About the Conference',
-  description: 'Understand the mission of AI Submit 2026 Chennai — hands-on skills in autonomous systems, custom model fine-tuning, and neural circuits.',
+  description: 'Understand the mission of AI Summit 2026 Chennai — hands-on skills in autonomous systems, custom model fine-tuning, and neural circuits.',
 };
 
 export default function AboutPage() {

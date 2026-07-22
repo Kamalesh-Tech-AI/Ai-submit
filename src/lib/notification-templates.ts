@@ -39,7 +39,7 @@ export const TEMPLATE_CONFIGS: TemplateConfig[] = [
     category: 'reminder',
     icon: '⏰',
     description: 'Remind attendees about the event start time and encourage them to arrive on time.',
-    messageBody: '🕐 Reminder: AI Submit 2026 starts in {{hours_until}} hours! Registration opens at 9:00 AM on {{event_date}} at {{venue}}. Don\'t forget your QR pass! 🎫',
+    messageBody: '🕐 Reminder: AI Summit 2026 starts in {{hours_until}} hours! Registration opens at 9:00 AM on {{event_date}} at {{venue}}. Don\'t forget your QR pass! 🎫',
     placeholders: [
       { key: 'hours_until', label: 'Hours Until Event', type: 'manual', defaultValue: '24' },
       { key: 'event_date', label: 'Event Date', type: 'auto', defaultValue: formattedDate },
@@ -52,7 +52,7 @@ export const TEMPLATE_CONFIGS: TemplateConfig[] = [
     category: 'update',
     icon: '🎤',
     description: 'Notify attendees about a confirmed chief guest or speaker and their session details.',
-    messageBody: '🌟 Exciting Update! {{guest_name}} ({{guest_designation}}, {{guest_org}}) will be speaking at AI Submit 2026. Don\'t miss their session: "{{session_title}}" at {{session_time}}! 🎓',
+    messageBody: '🌟 Exciting Update! {{guest_name}} ({{guest_designation}}, {{guest_org}}) will be speaking at AI Summit 2026. Don\'t miss their session: "{{session_title}}" at {{session_time}}! 🎓',
     placeholders: [
       { key: 'guest_name', label: 'Guest Name', type: 'manual', defaultValue: CHIEF_GUESTS[0]?.name || '' },
       { key: 'guest_designation', label: 'Designation', type: 'manual', defaultValue: CHIEF_GUESTS[0]?.designation || '' },
@@ -79,7 +79,7 @@ export const TEMPLATE_CONFIGS: TemplateConfig[] = [
     category: 'general',
     icon: '📢',
     description: 'Send a custom announcement or update to all attendees.',
-    messageBody: '📢 AI Submit 2026 Update: {{custom_message}}',
+    messageBody: '📢 AI Summit 2026 Update: {{custom_message}}',
     placeholders: [
       { key: 'custom_message', label: 'Your Message', type: 'manual', defaultValue: '' },
     ],
@@ -90,7 +90,7 @@ export const TEMPLATE_CONFIGS: TemplateConfig[] = [
     category: 'reminder',
     icon: '✅',
     description: 'Remind attendees to check in with their QR code at the venue.',
-    messageBody: '🎫 Don\'t forget to check in! Show your QR code at the registration desk when you arrive at AI Submit 2026. See you at {{venue}} on {{event_date}}! ✨',
+    messageBody: '🎫 Don\'t forget to check in! Show your QR code at the registration desk when you arrive at AI Summit 2026. See you at {{venue}} on {{event_date}}! ✨',
     placeholders: [
       { key: 'venue', label: 'Venue', type: 'auto', defaultValue: DEFAULT_VENUE },
       { key: 'event_date', label: 'Event Date', type: 'auto', defaultValue: formattedDate },
@@ -102,7 +102,7 @@ export const TEMPLATE_CONFIGS: TemplateConfig[] = [
     category: 'general',
     icon: '🎉',
     description: 'Welcome attendees on the day of the event with key highlights and logistics info.',
-    messageBody: '🎉 Welcome to AI Submit 2026, {{attendee_name}}! Today\'s highlights: {{day_highlights}}. WiFi: AISubmit2026 | Support: Help Desk near Registration. Enjoy! 🚀',
+    messageBody: '🎉 Welcome to AI Summit 2026, {{attendee_name}}! Today\'s highlights: {{day_highlights}}. WiFi: AISummit2026 | Support: Help Desk near Registration. Enjoy! 🚀',
     placeholders: [
       { key: 'attendee_name', label: 'Attendee Name', type: 'auto', defaultValue: '' },
       { key: 'day_highlights', label: 'Day Highlights', type: 'manual', defaultValue: 'Inaugural Keynote, Panel Discussion on Fintech, AI in Medical Imaging' },

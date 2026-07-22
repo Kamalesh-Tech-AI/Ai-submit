@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 
 export const metadata: Metadata = {
   title: 'Venue & Location Details',
-  description: 'Find details, map directions, and transit guidance to IITM Research Park in Taramani, Chennai for AI Submit 2026.',
+  description: 'Find details, map directions, and transit guidance to IITM Research Park in Taramani, Chennai for AI Summit 2026.',
 };
 
 export default function VenuePage() {
@@ -33,7 +33,7 @@ export default function VenuePage() {
       {/* Page Heading */}
       <SectionHeading
         title="VENUE & DIRECTIONS"
-        subtitle="AI Submit 2026 will take place in Taramani, Chennai's premier deep-tech research hub."
+        subtitle="AI Summit 2026 will take place in Taramani, Chennai's premier deep-tech research hub."
       />
 
       {/* Main Grid */}

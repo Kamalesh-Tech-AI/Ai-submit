@@ -216,13 +216,13 @@ insert into public.notification_templates (name, slug, message_body, category) v
   (
     '⏰ Time Reminder',
     'time_reminder',
-    '🕐 Reminder: AI Submit 2026 starts in {{hours_until}} hours! Registration opens at 9:00 AM on {{event_date}} at {{venue}}. Don''t forget your QR pass! 🎫',
+    '🕐 Reminder: AI Summit 2026 starts in {{hours_until}} hours! Registration opens at 9:00 AM on {{event_date}} at {{venue}}. Don''t forget your QR pass! 🎫',
     'reminder'
   ),
   (
     '🎤 Chief Guest Update',
     'chief_guest_update',
-    '🌟 Exciting Update! {{guest_name}} ({{guest_designation}}, {{guest_org}}) will be speaking at AI Submit 2026. Don''t miss their session: "{{session_title}}" at {{session_time}}! 🎓',
+    '🌟 Exciting Update! {{guest_name}} ({{guest_designation}}, {{guest_org}}) will be speaking at AI Summit 2026. Don''t miss their session: "{{session_title}}" at {{session_time}}! 🎓',
     'update'
   ),
   (
@@ -234,19 +234,19 @@ insert into public.notification_templates (name, slug, message_body, category) v
   (
     '📢 General Announcement',
     'general_announcement',
-    '📢 AI Submit 2026 Update: {{custom_message}}',
+    '📢 AI Summit 2026 Update: {{custom_message}}',
     'general'
   ),
   (
     '✅ Check-in Reminder',
     'checkin_reminder',
-    '🎫 Don''t forget to check in! Show your QR code at the registration desk when you arrive at AI Submit 2026. See you at {{venue}} on {{event_date}}! ✨',
+    '🎫 Don''t forget to check in! Show your QR code at the registration desk when you arrive at AI Summit 2026. See you at {{venue}} on {{event_date}}! ✨',
     'reminder'
   ),
   (
     '🎉 Event Day Welcome',
     'event_day_welcome',
-    '🎉 Welcome to AI Submit 2026, {{attendee_name}}! Today''s highlights: {{day_highlights}}. WiFi: AISubmit2026 | Support: Help Desk near Registration. Enjoy! 🚀',
+    '🎉 Welcome to AI Summit 2026, {{attendee_name}}! Today''s highlights: {{day_highlights}}. WiFi: AISummit2026 | Support: Help Desk near Registration. Enjoy! 🚀',
     'general'
   )
 on conflict (slug) do nothing;
