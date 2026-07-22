@@ -11,6 +11,7 @@ import Card from '@/components/ui/Card';
 interface TicketDetails {
   id: string;
   qr_token: string;
+  seat_number?: string | null;
   checked_in: boolean;
   checked_in_at: string | null;
   profiles: {
@@ -46,6 +47,7 @@ export default function TicketPage() {
           .select(`
             id,
             qr_token,
+            seat_number,
             checked_in,
             checked_in_at,
             profiles:user_id (
@@ -183,6 +185,11 @@ export default function TicketPage() {
               <p className="text-xs text-[#0B3A82] font-bold mt-1">
                 {profile?.university}
               </p>
+              {ticketData.seat_number && (
+                <div className="mt-3 inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#2563EB]/10 border border-[#2563EB]/30 text-[#2563EB] text-xs font-mono font-bold">
+                  <span>💺 Hall D7 • Seat {ticketData.seat_number}</span>
+                </div>
+              )}
             </div>
 
             {/* Live QR generator display */}

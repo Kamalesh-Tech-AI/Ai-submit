@@ -56,10 +56,14 @@ create table if not exists public.registrations (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references public.profiles(id) on delete cascade,
   qr_token uuid default gen_random_uuid() unique,
+  seat_number text,
   checked_in boolean default false,
   checked_in_at timestamptz,
   created_at timestamptz default now()
 );
+
+-- Ensure seat_number column exists for existing tables
+alter table public.registrations add column if not exists seat_number text;
 
 alter table public.registrations enable row level security;
 

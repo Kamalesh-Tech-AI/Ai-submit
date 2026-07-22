@@ -13,6 +13,7 @@ export interface Registration {
   id: string;
   user_id: string;
   qr_token: string;
+  seat_number?: string | null;
   checked_in: boolean;
   checked_in_at: string | null;
   created_at: string;

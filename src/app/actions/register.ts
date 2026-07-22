@@ -8,6 +8,27 @@ interface CompleteRegistrationParams {
   university: string;
   attendeeType: 'student' | 'professional';
   fullName: string;
+  seatNumber?: string;
+}
+
+export async function getReservedSeats(): Promise<string[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('registrations')
+      .select('seat_number')
+      .not('seat_number', 'is', null);
+
+    if (error) {
+      console.error('Error fetching reserved seats:', error);
+      return [];
+    }
+
+    return (data || []).map((row: { seat_number: string | null }) => row.seat_number).filter(Boolean) as string[];
+  } catch (err) {
+    console.error('Failed to get reserved seats:', err);
+    return [];
+  }
 }
 
 export async function completeRegistration(params: CompleteRegistrationParams) {
@@ -36,8 +57,7 @@ export async function completeRegistration(params: CompleteRegistrationParams) {
       return { success: false, error: 'Failed to update profile details.' };
     }
 
-    // 2. Create the registration entry (generate a unique qr_token if not exist)
-    // Check if registration already exists first
+    // 2. Create or update the registration entry (generate a unique qr_token if not exist)
     const { data: existingReg, error: fetchRegError } = await supabase
       .from('registrations')
       .select('id')
@@ -50,16 +70,23 @@ export async function completeRegistration(params: CompleteRegistrationParams) {
     }
 
     if (existingReg) {
-      // Registration already exists, which is fine
+      // Update seat_number if provided
+      if (params.seatNumber) {
+        await supabase
+          .from('registrations')
+          .update({ seat_number: params.seatNumber })
+          .eq('id', existingReg.id);
+      }
       revalidatePath('/ticket');
       return { success: true };
     }
 
-    // Insert new registration
+    // Insert new registration with seat_number
     const { error: regError } = await supabase
       .from('registrations')
       .insert({
         user_id: user.id,
+        seat_number: params.seatNumber || null,
       });
 
     if (regError) {
@@ -74,3 +101,4 @@ export async function completeRegistration(params: CompleteRegistrationParams) {
     return { success: false, error: error instanceof Error ? error.message : 'An unexpected error occurred.' };
   }
 }
+
